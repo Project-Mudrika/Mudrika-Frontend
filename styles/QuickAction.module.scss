@@ -1,0 +1,31 @@
+.QuickAction {
+  color: initial;
+  text-decoration: none;
+
+  @media screen and (max-width: 768px) {
+    max-width: 50%;
+  }
+
+  @media screen and (max-width: 576px) {
+    max-width: initial;
+    width: 100%;
+  }
+
+  &:hover {
+    color: initial;
+  }
+
+  .QuickAction_card {
+    transition: all 0.1s;
+    box-shadow: 0.5rem 0.5rem 20px rgba(0, 0, 0, 0.096);
+    border: none;
+
+    &:hover {
+      box-shadow: 0.5rem 1rem 20px rgba(0, 0, 0, 0.137);
+    }
+
+    &:active {
+      box-shadow: 0.5rem 0.5rem 10px rgba(0, 0, 0, 0.267);
+    }
+  }
+}
