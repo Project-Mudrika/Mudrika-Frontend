@@ -4,11 +4,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
 import Dashboard from "./components/Dashboard";
 
+import { useWeb3 } from "@3rdweb/hooks"
+import { useEffect } from "react";
+
 export default function Home() {
+  const { address, connectWallet } = useWeb3();
+
+  const web3login = () => {
+    connectWallet("injected")
+    alert(address)
+  }
+
   return (
     <div className={styles.home}>
-      <NavBar />
+      <NavBar web3login={web3login} />
       <Dashboard />
-    </div>
+    </div >
   );
 }
