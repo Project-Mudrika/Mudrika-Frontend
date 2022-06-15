@@ -1,11 +1,11 @@
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import React from "react";
 import { Icon } from "@iconify/react";
 
 export default function NavBar() {
   return (
     <div className="NavBar">
-      <Navbar bg="light" fixed="top" expand="md">
+      <Navbar bg="dark" variant="dark" fixed="top" expand="md">
         <Container>
           <Navbar.Brand href="#dashboard">Mudrika</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,14 +1,7 @@
-// $body-color: #3b3b3b;
+@import "node_modules/bootstrap/scss/bootstrap";
+
+$pri: #28a745;
+$sec: #36cea6;
+$alt-light: #f1f3f2;
 
 // Custom theme colors
-$pri: #f1f3f2;
-$sec: #36cea6;
-$acc: #28a745;
-
-$theme-colors: (
-  "primary": $acc,
-  "secondary": $sec,
-  "light": $pri,
-);
-
-@import "node_modules/bootstrap/scss/bootstrap";
