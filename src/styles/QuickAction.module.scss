@@ -1,4 +1,4 @@
-@import "./custom_global";
+@import "./color_scheme.module";
 
 .QuickAction {
   color: initial;
@@ -21,7 +21,7 @@
     transition: all 0.1s;
     box-shadow: 0 0.5rem 8px rgba(0, 0, 0, 0.342);
     border: none;
-    background-color: $pri;
+    background-color: map-get($custom-theme, sec);
 
     &:hover {
       box-shadow: 0.5rem 1rem 20px rgba(0, 0, 0, 0.137);

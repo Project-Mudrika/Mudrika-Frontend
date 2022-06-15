@@ -1,0 +1,11 @@
+$custom-theme: (
+  pri: #28a745,
+  sec: #36cea6,
+  alt-light: #f1f3f2,
+);
+
+:export {
+  @each $key, $value in $custom-theme {
+    #{unquote($key)}: $value;
+  }
+}
