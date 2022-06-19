@@ -11,59 +11,36 @@ export default function Dashboard() {
       <div className={styles.Dashboard_content}>
         <h4 className="h4">Recent Cases</h4>
         <Card bg="light" className={styles.Dashboard_recent_cases}>
-          {/* <Card.Header>Recent Cases</Card.Header> */}
           <Card.Body>
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
+                  <th scope="col">Case No</th>
+                  <th scope="col">Name of Applicant</th>
+                  <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
+                  <td>678567</td>
+                  <td>John Smith</td>
+                  <td>
+                    <div className={styles.status_rejected}>Rejected</div>
+                  </td>
                 </tr>
                 <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
+                  <td>976876</td>
+                  <td>Alice George</td>
+                  <td>
+                    <div className={styles.status_pending}>Pending</div>
+                  </td>
                 </tr>
                 <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
+                  <td>293439</td>
+                  <td>Bob Daniel</td>
+                  <td>
+                    <div className={styles.status_approved}>Approved</div>
+                  </td>
                 </tr>
               </tbody>
             </table>
