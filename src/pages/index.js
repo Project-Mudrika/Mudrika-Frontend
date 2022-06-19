@@ -11,9 +11,12 @@ export default function Home() {
   const { address, connectWallet } = useWeb3();
 
   const web3login = () => {
-    connectWallet("injected")
     alert(address)
   }
+
+  useEffect(() => {
+    connectWallet("injected")
+  }, [])
 
   return (
     <div className={styles.home}>
