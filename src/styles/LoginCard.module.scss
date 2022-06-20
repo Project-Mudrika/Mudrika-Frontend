@@ -1,0 +1,12 @@
+@import "./color_scheme.module";
+
+.LoginCard {
+  background-color: map-get($map: $custom-theme, $key: white-100);
+  padding: 2rem;
+  border-radius: 1rem;
+
+  .Login_logo {
+    font-family: "Lora", serif;
+    font-size: 3rem;
+  }
+}

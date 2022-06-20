@@ -21,7 +21,11 @@
     transition: all 0.1s;
     box-shadow: 0 0.5rem 8px rgba(0, 0, 0, 0.342);
     border: none;
-    background-color: map-get($custom-theme, sec);
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    background-color: map-get($custom-theme, slate);
+    color: white;
 
     &:hover {
       box-shadow: 0.5rem 1rem 20px rgba(0, 0, 0, 0.137);
@@ -29,6 +33,11 @@
 
     &:active {
       box-shadow: 0.5rem 0.5rem 10px rgba(0, 0, 0, 0.267);
+    }
+
+    .QuickAction_icon {
+      color: map-get($map: $custom-theme, $key: stone);
+      margin: 1.5rem 0;
     }
   }
 }
