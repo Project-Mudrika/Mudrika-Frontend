@@ -13,11 +13,12 @@ function QuickAction(props) {
       <Card className={styles.QuickAction_card}>
         <Card.Body className="d-flex flex-column justify-content-center align-items-center">
           <Icon
-            icon="healthicons:ui-user-profile"
+            icon={props.icon? props.icon : "healthicons:ui-user-profile"}
             height={"3em"}
-            className="my-3"
+            className={styles.QuickAction_icon}
           />
           <Card.Text>
+            
             {props.text ? props.text : "Lorem Ipsum Dolor Sit Amet"}
           </Card.Text>
         </Card.Body>

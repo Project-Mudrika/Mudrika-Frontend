@@ -1,0 +1,21 @@
+@import "./color_scheme.module";
+
+.Navbar {
+  background-color: map-get($custom-theme, brown-100);
+  font-weight: 700;
+  .Navbar_brand {
+    color: map-get($custom-theme, off-white);
+    font-family: "Lora", serif;
+    font-size: 2rem;
+  }
+  .Navbar_list {
+    margin-left: auto;
+    .Navbar_list_item {
+      color: map-get($custom-theme, lav);
+      font-weight: 400;
+    }
+    .Navbar_list_item.active {
+      color: red;
+    }
+  }
+}
