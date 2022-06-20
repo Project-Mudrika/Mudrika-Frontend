@@ -6,22 +6,25 @@ import NavBar from "./components/NavBar";
 
 import { useWeb3 } from "@3rdweb/hooks"
 import { useEffect } from "react";
+import Router from 'next/router';
 
 export default function Home() {
   const { address, connectWallet } = useWeb3();
 
-  const web3login = () => {
-    alert(address)
+  const web3login = async () => {
+    connectWallet("injected")
   }
 
   useEffect(() => {
-    connectWallet("injected")
-  }, [])
+    if (address) {
+      Router.push('/dashboard');
+    }
+  })
 
   return (
     <div className={styles.home}>
       <NavBar loginPage={true} />
-      <LoginCard />
+      <LoginCard login={web3login} />
     </div>
   );
 }
