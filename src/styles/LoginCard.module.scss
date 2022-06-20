@@ -2,11 +2,44 @@
 
 .LoginCard {
   background-color: map-get($map: $custom-theme, $key: white-100);
-  padding: 2rem;
+  box-shadow: 4px 4px 12px rgba(36, 31, 31, 0.13);
+  padding: 3rem;
   border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   .Login_logo {
     font-family: "Lora", serif;
     font-size: 3rem;
+    text-align: center;
+    .Login_logo_sub {
+      font-family: "Yrsa", serif;
+      font-size: 0.8rem;
+      color: #33322b;
+    }
+  }
+  .Login_Button {
+    background-color: map-get($map: $custom-theme, $key: stone);
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.233);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    gap: 1rem;
+    margin: 1rem 0 4rem;
+    &:hover {
+      background-color: map-get($map: $custom-theme, $key: slate);
+      box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.336);
+    }
+    &:active {
+      background-color: map-get($map: $custom-theme, $key: brown-100);
+      box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.411);
+    }
+
+    .Login_metaicon {
+      width: 1.5rem;
+    }
   }
 }
