@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../../styles/LoginCard.module.scss";
 import { Button } from "react-bootstrap";
 
-function LoginCard() {
+function LoginCard(props) {
   return (
     <div className={styles.LoginCard}>
       <div className={styles.Login_logo}>
@@ -12,7 +12,8 @@ function LoginCard() {
           Disaster Management Infrastructure
         </div>{" "}
       </div>
-      <Button size="md" variant="dark" className={styles.Login_Button}>
+      <Button size="md" variant="dark" className={styles.Login_Button}
+        onClick={props.login}>
         <img src="/metamask.svg" alt="" className={styles.Login_metaicon} />
         Sign In with MetaMask
       </Button>

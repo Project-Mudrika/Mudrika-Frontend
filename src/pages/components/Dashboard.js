@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useWeb3 } from "@3rdweb/hooks"
+import Router from 'next/router';
 import { Card } from "react-bootstrap";
 
 import QuickAction from "./QuickAction";
@@ -6,6 +8,15 @@ import QuickAction from "./QuickAction";
 import styles from "../../styles/Dashboard.module.scss";
 
 export default function Dashboard() {
+
+  const { address } = useWeb3();
+
+  useEffect(() => {
+    if (!address) {
+      Router.push('/')
+    }
+  })
+
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
@@ -50,7 +61,7 @@ export default function Dashboard() {
         </div>
         <h4 className="h4">Quick Actions</h4>
         <div className={styles.Dashboard_quick_actions}>
-          <QuickAction icon="ic:baseline-note-add" text="Register New Case"/>
+          <QuickAction icon="ic:baseline-note-add" text="Register New Case" />
           <QuickAction icon="ic:baseline-account-balance-wallet" text="Manage Funds" />
           <QuickAction />
           <QuickAction />
