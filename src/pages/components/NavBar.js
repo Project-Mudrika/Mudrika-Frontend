@@ -9,21 +9,24 @@ export default function NavBar(props) {
     <div className="NavBar">
       <Navbar className={styles.Navbar} fixed="top" expand="md">
         <Container>
-          <Navbar.Brand className={styles.Navbar_brand} href="#dashboard">
+          <Navbar.Brand className={styles.Navbar_brand} href="/">
             Mudrika
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={styles.Navbar_list}>
               {props.loginPage ? null : (
-                <Nav.Link className={`${styles.Navbar_list_item}`} href="#home">
+                <Nav.Link
+                  className={`${styles.Navbar_list_item}`}
+                  href="/dashboard"
+                >
                   Dashboard
                 </Nav.Link>
               )}
               {props.loginPage ? null : (
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
-                  href="#cases"
+                  href="/cases"
                 >
                   Cases
                 </Nav.Link>
@@ -31,12 +34,11 @@ export default function NavBar(props) {
             </Nav>
             <Nav>
               <Nav.Link href="#profile">
-                <Icon icon="healthicons:ui-user-profile" height={"2em"} />
-              </Nav.Link>
-            </Nav>
-            <Nav>
-              <Nav.Link>
-                <Icon icon="ic:baseline-login" height={"2em"} onClick={props.web3login} />
+                <Icon
+                  icon="healthicons:ui-user-profile"
+                  height={"2em"}
+                  style={{ color: "#9f909c" }}
+                />
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
