@@ -7,15 +7,27 @@ import { Icon } from "@iconify/react";
 import QuickAction from "./QuickAction";
 
 import styles from "../../styles/Dashboard.module.scss";
+import Authority from "../../helpers/HigherAuth";
+import { useState } from "react";
 
 export default function Dashboard() {
   const { address } = useWeb3();
+  const authority = new Authority();
+  const [req_table_data, setRequests] = useState([]);
+
+  const fetchData = async () => {
+    var requests = [];
+    requests = await authority.fetchRequests();
+    setRequests(requests);
+    console.log(requests);
+  }
 
   useEffect(() => {
     if (!address) {
       Router.push("/");
     }
-  });
+    authority.fetchRequests().then(requests => setRequests(requests));
+  }, []);
 
   // {
   //     description: description,
@@ -26,34 +38,34 @@ export default function Dashboard() {
   //     approvalStatus: false
   // }
 
-  const req_table_data = [
-    {
-      req_id: 12022,
-      req_address: "pq394vj09w0fpjw0949",
-      req_authority: "Kerala",
-      req_amount: 8000000,
-      req_desc: "Lorem Ipsum Dolor Sit Amet",
-    },
-    {
-      req_id: 12023,
-      req_address: "98HI979h07HLKJPjir",
-      req_authority: "Rajasthan",
-      req_amount: 45000000,
-      req_desc: "Lorem Ipsum Dolor Sit Amet",
-    },
-    {
-      req_id: 12024,
-      req_address: "pq394vj09w0fpjw0949",
-      req_authority: "Uttar Pradesh",
-      req_amount: 90000000,
-      req_desc: "Lorem Ipsum Dolor Sit Amet",
-    },
-  ];
+  // const req_table_data = [
+  //   {
+  //     req_id: 12022,
+  //     req_address: "pq394vj09w0fpjw0949",
+  //     req_authority: "Kerala",
+  //     req_amount: 8000000,
+  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //   },
+  //   {
+  //     req_id: 12023,
+  //     req_address: "98HI979h07HLKJPjir",
+  //     req_authority: "Rajasthan",
+  //     req_amount: 45000000,
+  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //   },
+  //   {
+  //     req_id: 12024,
+  //     req_address: "pq394vj09w0fpjw0949",
+  //     req_authority: "Uttar Pradesh",
+  //     req_amount: 90000000,
+  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //   },
+  // ];
 
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
-        <h4 className="h4">Recent Fund Requests</h4>
+        <h4 className="h4">Recent Fund Requests To You</h4>
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
             <Card.Body>
@@ -61,8 +73,8 @@ export default function Dashboard() {
                 <thead>
                   <tr>
                     <th scope="col">Request No</th>
-                    <th scope="col">Authority Address</th>
-                    <th scope="col">Applicant Authority</th>
+                    <th scope="col">To Authority Address</th>
+                    <th scope="col">From Applicant Authority</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Actions</th>
                   </tr>
