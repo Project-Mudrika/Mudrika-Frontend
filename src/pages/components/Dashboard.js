@@ -68,22 +68,16 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {req_table_data.map((tab_data, i) => {
+                  {req_table_data.slice(0, 5).map((tab_data, i) => {
                     return (
-                      <tr>
-                        <td scope="col" key={i}>
-                          {tab_data.req_id}
-                        </td>
-                        <td scope="col" key={i}>
-                          {tab_data.req_address}
-                        </td>
-                        <td scope="col" key={i}>
-                          {tab_data.req_authority}
-                        </td>
-                        <td scope="col" key={i}>
+                      <tr key={i}>
+                        <td scope="col">{tab_data.req_id}</td>
+                        <td scope="col">{tab_data.req_address}</td>
+                        <td scope="col">{tab_data.req_authority}</td>
+                        <td scope="col">
                           {tab_data.req_amount.toLocaleString("hi")}
                         </td>
-                        <td scope="col" key={i} className="d-flex">
+                        <td scope="col" className="d-flex">
                           <Button
                             size="sm"
                             style={{
@@ -116,6 +110,9 @@ export default function Dashboard() {
                               margin: "0 0.5rem",
                             }}
                             variant="link"
+                            onClick={() =>
+                              Router.push("/manageFunds/" + tab_data.req_id)
+                            }
                           >
                             More Info
                           </Button>
@@ -130,10 +127,10 @@ export default function Dashboard() {
         </div>
         <h4 className="h4">Quick Actions</h4>
         <div className={styles.Dashboard_quick_actions}>
-          <QuickAction icon="ic:baseline-note-add" text="Register New Case" />
+          <QuickAction icon="ic:baseline-note-add" text="Allot New Fund" />
           <QuickAction
             icon="ic:baseline-account-balance-wallet"
-            text="Manage Funds"
+            text="Manage Fund Requests"
           />
           <QuickAction />
           <QuickAction />

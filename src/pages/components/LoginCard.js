@@ -12,8 +12,12 @@ function LoginCard(props) {
           Disaster Management Infrastructure
         </div>{" "}
       </div>
-      <Button size="md" variant="dark" className={styles.Login_Button}
-        onClick={props.login}>
+      <Button
+        size="md"
+        variant="dark"
+        className={styles.Login_Button}
+        onClick={props.login}
+      >
         <img src="/metamask.svg" alt="" className={styles.Login_metaicon} />
         Sign In with MetaMask
       </Button>
