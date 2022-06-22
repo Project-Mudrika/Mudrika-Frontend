@@ -36,9 +36,10 @@ class Authority {
         await this.Mudrika.methods.approveRequest(requestId).send();
     }
 
-    async requestFunds(amount, description) {
+    async requestFunds(amount, to, description) {
         await this.fetchAccount();
-        await this.Mudrika.methods.requestFunds(amount, description).send();
+        await this.Mudrika.methods.requestFunds(amount, to, description).send();
+        return "Success";
     }
 
     async fetchRequests() {
