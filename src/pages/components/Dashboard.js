@@ -20,13 +20,13 @@ export default function Dashboard() {
     requests = await authority.fetchRequests();
     setRequests(requests);
     console.log(requests);
-  }
+  };
 
   useEffect(() => {
     if (!address) {
       Router.push("/");
     }
-    authority.fetchRequests().then(requests => setRequests(requests));
+    authority.fetchRequests().then((requests) => setRequests(requests));
   }, []);
 
   // {
@@ -81,13 +81,14 @@ export default function Dashboard() {
                 </thead>
                 <tbody>
                   {req_table_data.slice(0, 5).map((tab_data, i) => {
+                    console.log(`tab_data${i}`, tab_data);
                     return (
                       <tr key={i}>
                         <td scope="col">{tab_data.req_id}</td>
                         <td scope="col">{tab_data.req_address}</td>
                         <td scope="col">{tab_data.req_authority}</td>
                         <td scope="col">
-                          {tab_data.req_amount.toLocaleString("hi")}
+                          {parseInt(tab_data.req_amount).toLocaleString("hi")}
                         </td>
                         <td scope="col" className="d-flex">
                           <Button
@@ -139,10 +140,15 @@ export default function Dashboard() {
         </div>
         <h4 className="h4">Quick Actions</h4>
         <div className={styles.Dashboard_quick_actions}>
-          <QuickAction icon="ic:baseline-note-add" text="Allot New Fund" />
+          <QuickAction
+            icon="ic:baseline-note-add"
+            text="Allot New Fund"
+            href="/manageFunds/newFundRequest"
+          />
           <QuickAction
             icon="ic:baseline-account-balance-wallet"
             text="Manage Fund Requests"
+            href="/manageFunds"
           />
           <QuickAction />
           <QuickAction />
