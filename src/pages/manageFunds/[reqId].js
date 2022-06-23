@@ -15,7 +15,7 @@ function ReqId() {
 
   const data = {
     req_id: 12024,
-    req_address: "pq394vj09w0fpjw0949",
+    req_address: "Fetch Details using reqId",
     req_authority: "Uttar Pradesh",
     req_amount: 90000000,
     req_desc:
@@ -34,7 +34,7 @@ function ReqId() {
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Request ID</Form.Label>
-                <Form.Control type="text" value={data.req_id} readOnly={true} />
+                <Form.Control type="text" value={reqId} readOnly={true} />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Sender Wallet ID</Form.Label>
@@ -52,7 +52,9 @@ function ReqId() {
                 <Form.Label>Requested Amount</Form.Label>
                 <Form.Control
                   type="text"
-                  value={parseInt(data.req_amount).toLocaleString("hi")}
+                  value={
+                    "₹ " + parseInt(data.req_amount).toLocaleString("hi")
+                  }
                   readOnly={true}
                 />
               </Form.Group>
