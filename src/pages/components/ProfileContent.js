@@ -3,6 +3,7 @@ import { Form, Container, Row, Col } from "react-bootstrap";
 
 import styles from "../../styles/Profile.module.scss";
 import { useWeb3 } from "@3rdweb/hooks";
+import Router from "next/router";
 
 function ProfileContent() {
   const sampleProfile = {
@@ -21,14 +22,20 @@ function ProfileContent() {
   };
 
   const [profile, setProfile] = useState(sampleProfile);
+  const { address } = useWeb3();
 
   useEffect(() => {
+
+    // check if not logged in
+    if (!address) {
+      Router.push('/');
+    }
+
     fetch(
       "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-        new URLSearchParams({
-          //   walletid: address,
-          walletid: "0xd1CfE5c21023C4F925376a7d7224bA9122Bb4742",
-        })
+      new URLSearchParams({
+        walletid: address,
+      })
     )
       .then((res) => res.json())
       .then((data) => setProfile(data));

@@ -3,6 +3,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 
 import styles from "../../styles/NavBar.module.scss";
+import Router from "next/router";
 
 export default function NavBar(props) {
   return (
@@ -42,7 +43,13 @@ export default function NavBar(props) {
                   />
                 }
               >
-                <NavDropdown.Item href="">Show Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/profile" onClick={(e) => {
+                  // prevent redirect fn of href link, router push needed to preserve useWeb3 context
+                  e.preventDefault();
+                  Router.push('/profile')
+                }} >
+                  Show Profile
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="">Logout</NavDropdown.Item>
               </NavDropdown>
