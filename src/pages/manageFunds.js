@@ -38,7 +38,7 @@ function manageFunds() {
 
   useEffect(() => {
     authority.fetchRequests().then((requests) => setRequests(requests));
-  });
+  }, []);
   return (
     <div className={bodyStyles.home}>
       <Navbar />

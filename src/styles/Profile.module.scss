@@ -1,0 +1,14 @@
+@import "./color_scheme.module";
+
+.Profile {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  margin: 4rem 0;
+  padding: 3rem;
+  flex-grow: 1;
+  flex-direction: column;
+  h4 {
+    color: map-get($map: $custom-theme, $key: slate);
+  }
+}

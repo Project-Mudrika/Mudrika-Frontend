@@ -9,6 +9,7 @@ import QuickAction from "./QuickAction";
 import styles from "../../styles/Dashboard.module.scss";
 import Authority from "../../helpers/HigherAuth";
 import { useState } from "react";
+import FundRequestTable from "./FundRequestTable";
 
 export default function Dashboard() {
   const { address } = useWeb3();
@@ -16,13 +17,13 @@ export default function Dashboard() {
   const [req_table_data, setRequests] = useState([]);
 
   const approveRequest = async (reqid) => {
-    await authority.approveRequest(reqid)
+    await authority.approveRequest(reqid);
 
     // reload after 5 seconds
     setTimeout(function () {
       window.location.reload();
     }, 2000);
-  }
+  };
 
   useEffect(() => {
     if (!address) {
@@ -38,73 +39,62 @@ export default function Dashboard() {
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
             <Card.Body>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Request No</th>
-                    <th scope="col">To Authority Address</th>
-                    <th scope="col">From Applicant Authority</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {req_table_data.slice(0, 5).map((tab_data, i) => {
-                    console.log(`tab_data${i}`, tab_data);
-                    return (
-                      <tr key={i}>
-                        <td scope="col">{tab_data.req_id}</td>
-                        <td scope="col">{tab_data.req_address}</td>
-                        <td scope="col">{tab_data.req_authority}</td>
-                        <td scope="col">
-                          {parseInt(tab_data.req_amount).toLocaleString("hi")}
-                        </td>
-                        <td scope="col" className="d-flex">
-                          <Button
-                            size="sm"
-                            style={{
-                              fontFamily: "Varela Round, sans-serif",
-                              margin: "0 0.5rem",
-                            }}
-                            variant="success"
-                            onClick={() => approveRequest(tab_data.req_id)}
-                          >
-                            <Icon icon="material-symbols:done" color="white" />
-                            Approve
-                          </Button>
-                          <Button
-                            size="sm"
-                            style={{
-                              fontFamily: "Varela Round, sans-serif",
-                              margin: "0 0.5rem",
-                            }}
-                            variant="danger"
-                          >
-                            <Icon
-                              icon="material-symbols:delete-outline-rounded"
-                              color="white"
-                            />
-                            Reject
-                          </Button>
-                          <Button
-                            size="sm"
-                            style={{
-                              fontFamily: "Varela Round, sans-serif",
-                              margin: "0 0.5rem",
-                            }}
-                            variant="link"
-                            onClick={() =>
-                              Router.push("/manageFunds/" + tab_data.req_id)
-                            }
-                          >
-                            More Info
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <FundRequestTable>
+                {req_table_data.slice(0, 5).map((tab_data, i) => {
+                  console.log(`tab_data${i}`, tab_data);
+                  return (
+                    <tr key={i}>
+                      <td scope="col">{tab_data.req_id}</td>
+                      <td scope="col">{tab_data.req_address}</td>
+                      <td scope="col">{tab_data.req_authority}</td>
+                      <td scope="col">
+                        {parseInt(tab_data.req_amount).toLocaleString("hi")}
+                      </td>
+                      <td scope="col" className="d-flex">
+                        <Button
+                          size="sm"
+                          style={{
+                            fontFamily: "Varela Round, sans-serif",
+                            margin: "0 0.5rem",
+                          }}
+                          variant="success"
+                          onClick={() => approveRequest(tab_data.req_id)}
+                        >
+                          <Icon icon="material-symbols:done" color="white" />
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          style={{
+                            fontFamily: "Varela Round, sans-serif",
+                            margin: "0 0.5rem",
+                          }}
+                          variant="danger"
+                        >
+                          <Icon
+                            icon="material-symbols:delete-outline-rounded"
+                            color="white"
+                          />
+                          Reject
+                        </Button>
+                        <Button
+                          size="sm"
+                          style={{
+                            fontFamily: "Varela Round, sans-serif",
+                            margin: "0 0.5rem",
+                          }}
+                          variant="link"
+                          onClick={() =>
+                            Router.push("/manageFunds/" + tab_data.req_id)
+                          }
+                        >
+                          More Info
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </FundRequestTable>
             </Card.Body>
           </Card>
         </div>

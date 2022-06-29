@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Container, Button } from "react-bootstrap";
 import React from "react";
 import { Icon } from "@iconify/react";
 
@@ -33,13 +33,19 @@ export default function NavBar(props) {
               )}
             </Nav>
             <Nav>
-              <Nav.Link href="#profile">
-                <Icon
-                  icon="healthicons:ui-user-profile"
-                  height={"2em"}
-                  style={{ color: "#9f909c" }}
-                />
-              </Nav.Link>
+              <NavDropdown
+                title={
+                  <Icon
+                    icon="healthicons:ui-user-profile"
+                    height={"2em"}
+                    style={{ color: "#9f909c" }}
+                  />
+                }
+              >
+                <NavDropdown.Item href="">Show Profile</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="">Logout</NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>
