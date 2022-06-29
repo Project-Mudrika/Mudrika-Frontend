@@ -15,12 +15,14 @@ export default function Dashboard() {
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
 
-  const fetchData = async () => {
-    var requests = [];
-    requests = await authority.fetchRequests();
-    setRequests(requests);
-    console.log(requests);
-  };
+  const approveRequest = async (reqid) => {
+    await authority.approveRequest(reqid)
+
+    // reload after 5 seconds
+    setTimeout(function () {
+      window.location.reload();
+    }, 2000);
+  }
 
   useEffect(() => {
     if (!address) {
@@ -28,39 +30,6 @@ export default function Dashboard() {
     }
     authority.fetchRequests().then((requests) => setRequests(requests));
   }, []);
-
-  // {
-  //     description: description,
-  //     from: address(this),
-  //     to: msg.sender,
-  //     fund: amount,
-  //     requestId: _requestCount + 1,
-  //     approvalStatus: false
-  // }
-
-  // const req_table_data = [
-  //   {
-  //     req_id: 12022,
-  //     req_address: "pq394vj09w0fpjw0949",
-  //     req_authority: "Kerala",
-  //     req_amount: 8000000,
-  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
-  //   },
-  //   {
-  //     req_id: 12023,
-  //     req_address: "98HI979h07HLKJPjir",
-  //     req_authority: "Rajasthan",
-  //     req_amount: 45000000,
-  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
-  //   },
-  //   {
-  //     req_id: 12024,
-  //     req_address: "pq394vj09w0fpjw0949",
-  //     req_authority: "Uttar Pradesh",
-  //     req_amount: 90000000,
-  //     req_desc: "Lorem Ipsum Dolor Sit Amet",
-  //   },
-  // ];
 
   return (
     <div className={styles.Dashboard}>
@@ -98,6 +67,7 @@ export default function Dashboard() {
                               margin: "0 0.5rem",
                             }}
                             variant="success"
+                            onClick={() => approveRequest(tab_data.req_id)}
                           >
                             <Icon icon="material-symbols:done" color="white" />
                             Approve

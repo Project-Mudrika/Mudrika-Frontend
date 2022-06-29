@@ -27,7 +27,7 @@ class Authority {
     constructor() {
         this.contractAbi = Mudrika.abi;
         // this.contractAddress = process.env.NEXT_PUBLIC_Contract_ID;
-        this.contractAddress = "0xAd6f2348CC0780E8c71b5c976e5958b6EFc8dc97";
+        this.contractAddress = "0x7dD9387D820Dc234e0904363bbFb4813b23AD225";
 
     }
 
@@ -49,7 +49,7 @@ class Authority {
         const total = await this.Mudrika.methods.requestCount().call();
         for (var i = 0; i <= total; i++) {
             const request = await this.Mudrika.methods.requestsReceived(i).call();
-            if (request.to.toUpperCase() == myAccount[0].toUpperCase()) {
+            if (request.to.toUpperCase() == myAccount[0].toUpperCase() && request.approvalStatus == false) {
                 requestsList.push({
                     req_id: request.requestId,
                     req_address: request.to,
