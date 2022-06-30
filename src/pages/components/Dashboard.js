@@ -16,25 +16,60 @@ export default function Dashboard() {
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
 
+  const loaderUserData = {
+    data: [
+      {
+        accid: "Loading...",
+        level: "Loading...",
+        fname: "Loading...",
+        lname: "Loading...",
+        state: "Loading...",
+        district: "Loading...",
+        username: "Loading...",
+      },
+    ],
+    count: null,
+  };
+  const [userData, setUserData] = useState(loaderUserData);
+
   const approveRequest = async (reqid) => {
     await authority.approveRequest(reqid);
 
     // reload after 5 seconds
-    setTimeout(function () {
-      window.location.reload();
-    }, 2000);
+    // setTimeout(function () {
+    //   window.location.reload();
+    // }, 2000);
+    console.log("Request approved");
+    authority.fetchRequests().then((requests) => setRequests(requests));
   };
 
   useEffect(() => {
     if (!address) {
       Router.push("/");
     }
+
+    fetch(
+      "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
+        new URLSearchParams({
+          walletid: address,
+        })
+    )
+      .then((res) => res.json())
+      .then((data) => setUserData(data));
+
     authority.fetchRequests().then((requests) => setRequests(requests));
   }, []);
 
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
+        <h3 className="h2">
+          Welcome, {userData.data[0].fname + " " + userData.data[0].lname}
+        </h3>
+        <p className="text-muted">Account ID: {userData.data[0].accid}</p>
+        <p className="text-muted">
+          Balance Amount: {"₹" + parseInt(123456).toLocaleString("hi-IN")}
+        </p>
         <h4 className="h4">Recent Fund Requests To You</h4>
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
@@ -45,10 +80,19 @@ export default function Dashboard() {
                   return (
                     <tr key={i}>
                       <td scope="col">{tab_data.req_id}</td>
-                      <td scope="col">{tab_data.req_address}</td>
-                      <td scope="col">{tab_data.req_authority}</td>
                       <td scope="col">
-                        {parseInt(tab_data.req_amount).toLocaleString("hi")}
+                        {tab_data.req_authority.slice(0, 15) + "..."}
+                      </td>
+                      {/* <td scope="col">{tab_data.req_state}</td> */}
+                      <td scope="col">Kerala</td>
+                      <td scope="col">
+                        {"₹" +
+                          parseInt(tab_data.req_amount).toLocaleString("hi-IN")}
+                      </td>
+                      <td scope="col">
+                        {new Date("01 January 2022").toDateString() +
+                          " " +
+                          new Date("01 January 2022").toLocaleTimeString()}
                       </td>
                       <td scope="col" className="d-flex">
                         <Button

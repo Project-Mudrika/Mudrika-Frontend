@@ -6,7 +6,7 @@ import { useWeb3 } from "@3rdweb/hooks";
 import Router from "next/router";
 
 function ProfileContent() {
-  const sampleProfile = {
+  const loaderProfile = {
     data: [
       {
         accid: "Loading...",
@@ -21,21 +21,20 @@ function ProfileContent() {
     count: null,
   };
 
-  const [profile, setProfile] = useState(sampleProfile);
+  const [profile, setProfile] = useState(loaderProfile);
   const { address } = useWeb3();
 
   useEffect(() => {
-
     // check if not logged in
     if (!address) {
-      Router.push('/');
+      Router.push("/");
     }
 
     fetch(
       "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-      new URLSearchParams({
-        walletid: address,
-      })
+        new URLSearchParams({
+          walletid: address,
+        })
     )
       .then((res) => res.json())
       .then((data) => setProfile(data));
