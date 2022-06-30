@@ -6,9 +6,10 @@ function FundRequestTable(props) {
       <thead>
         <tr>
           <th scope="col">Request No</th>
-          <th scope="col">To Authority Address</th>
           <th scope="col">From Applicant Authority</th>
+          <th scope="col">State</th>
           <th scope="col">Amount</th>
+          <th scope="col">Timestamp</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
