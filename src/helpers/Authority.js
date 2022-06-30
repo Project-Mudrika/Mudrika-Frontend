@@ -31,6 +31,11 @@ class Authority {
 
     }
 
+    async fetchBalance() {
+        await this.fetchAccount();
+        return await this.Mudrika.methods.fundRemaining().call();
+    }
+
     async approveRequest(requestId) {
         await this.fetchAccount();
         await this.Mudrika.methods.approveRequest(requestId).send();
@@ -50,6 +55,28 @@ class Authority {
         for (var i = 0; i <= total; i++) {
             const request = await this.Mudrika.methods.requestsReceived(i).call();
             if (request.to.toUpperCase() == myAccount[0].toUpperCase() && request.approvalStatus == false) {
+                requestsList.push({
+                    req_id: request.requestId,
+                    req_address: request.to,
+                    req_authority: request.from,
+                    req_amount: request.fund,
+                    req_desc: request.description,
+                });
+            }
+
+        }
+
+        return requestsList;
+    }
+
+    async fetchAllotments() {
+        await this.fetchAccount();
+        var myAccount = await window.ethereum.enable();
+        const requestsList = [];
+        const total = await this.Mudrika.methods.requestCount().call();
+        for (var i = 0; i <= total; i++) {
+            const request = await this.Mudrika.methods.requestsReceived(i).call();
+            if (request.from.toUpperCase() == myAccount[0].toUpperCase() && request.approvalStatus == true) {
                 requestsList.push({
                     req_id: request.requestId,
                     req_address: request.to,

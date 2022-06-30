@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import QuickAction from "./QuickAction";
 
 import styles from "../../styles/Dashboard.module.scss";
-import Authority from "../../helpers/HigherAuth";
+import Authority from "../../helpers/Authority";
 import { useState } from "react";
 import FundRequestTable from "./FundRequestTable";
 
@@ -31,6 +31,7 @@ export default function Dashboard() {
     count: null,
   };
   const [userData, setUserData] = useState(loaderUserData);
+  const [balance, setBalance] = useState(0);
 
   const approveRequest = async (reqid) => {
     await authority.approveRequest(reqid);
@@ -40,6 +41,7 @@ export default function Dashboard() {
     //   window.location.reload();
     // }, 2000);
     console.log("Request approved");
+    authority.fetchBalance().then((balance) => setBalance(balance));
     authority.fetchRequests().then((requests) => setRequests(requests));
   };
 
@@ -48,11 +50,13 @@ export default function Dashboard() {
       Router.push("/");
     }
 
+    authority.fetchBalance().then((balance) => setBalance(balance));
+
     fetch(
       "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-        new URLSearchParams({
-          walletid: address,
-        })
+      new URLSearchParams({
+        walletid: address,
+      })
     )
       .then((res) => res.json())
       .then((data) => setUserData(data));
@@ -68,7 +72,7 @@ export default function Dashboard() {
         </h3>
         <p className="text-muted">Account ID: {userData.data[0].accid}</p>
         <p className="text-muted">
-          Balance Amount: {"₹" + parseInt(123456).toLocaleString("hi-IN")}
+          Balance Amount: {"₹" + parseInt(balance).toLocaleString("hi-IN")}
         </p>
         <h4 className="h4">Recent Fund Requests To You</h4>
         <div className={styles.Dashboard_row}>
@@ -146,8 +150,9 @@ export default function Dashboard() {
         <div className={styles.Dashboard_quick_actions}>
           <QuickAction
             icon="ic:baseline-note-add"
-            text="Allot New Fund"
+            text="Request Funds"
             href="/manageFunds/newFundRequest"
+            onClick={(e) => { e.preventDefault(); Router.push('/manageFunds/newFundRequest') }}
           />
           <QuickAction
             icon="ic:baseline-account-balance-wallet"
