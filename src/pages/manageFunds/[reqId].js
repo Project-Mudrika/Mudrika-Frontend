@@ -1,26 +1,48 @@
-import React from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import Router, { useRouter } from "next/router";
 import { Button, Card, Form } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import NavBar from "../components/NavBar";
 
 import styles from "../../styles/reqDetails.module.scss";
+import Authority from "../../helpers/Authority";
+import { useWeb3 } from "@3rdweb/hooks";
 
 function ReqId() {
   const {
     query: { reqId },
   } = useRouter();
 
-  console.log("reqId", reqId);
+  const { address } = useWeb3();
 
-  const data = {
-    req_id: 12024,
-    req_address: "Fetch Details using reqId",
-    req_authority: "Uttar Pradesh",
-    req_amount: 90000000,
-    req_desc:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  const loadingData = {
+    req_id: "loading",
+    req_address: "loading",
+    req_authority: "loading",
+    req_amount: "loading",
+    req_desc: "loading"
   };
+
+  const [data, setData] = useState(loadingData);
+
+
+  const authority = new Authority();
+
+  useEffect(() => {
+    if (!address) {
+      Router.push("/");
+    }
+
+    authority.fetchRequestDetails(reqId)
+      .then((response) => {
+        setData(response)
+      })
+      .catch((error) => {
+        alert("Invalid Request Id")
+        window.location.href = "/";
+      })
+  }, []);
+
   return (
     <div className={styles.reqDetails}>
       <NavBar />

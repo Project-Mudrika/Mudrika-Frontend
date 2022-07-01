@@ -101,6 +101,18 @@ class Authority {
 
         return requestsList;
     }
+
+    async fetchRequestDetails(reqId) {
+        await this.fetchAccount();
+        const request = await this.Mudrika.methods.requestsReceived(reqId).call();
+        return {
+            req_id: request.requestId,
+            req_address: request.to,
+            req_authority: request.from,
+            req_amount: request.fund,
+            req_desc: request.description,
+        }
+    }
 }
 
 export default Authority;
