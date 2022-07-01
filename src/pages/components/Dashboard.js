@@ -45,6 +45,9 @@ export default function Dashboard() {
     authority.fetchRequests().then((requests) => setRequests(requests));
   };
 
+  //watch for fund transfer event from contract
+  // authority.watchTransferEvent(address);
+
   useEffect(() => {
     if (!address) {
       Router.push("/");

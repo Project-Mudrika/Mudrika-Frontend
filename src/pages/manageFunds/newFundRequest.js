@@ -6,7 +6,7 @@ import bodyStyles from "../../styles/Home.module.scss";
 import { Form, Button, Card } from "react-bootstrap";
 import { useEffect } from "react";
 import { useState } from "react";
-import Authority from "../../helpers/HigherAuth";
+import Authority from "../../helpers/Authority";
 
 function NewFundRequest() {
 
@@ -25,7 +25,9 @@ function NewFundRequest() {
     e.preventDefault();
     const res = await authority.requestFunds(amount, toAddr, description)
     alert(res)
-    window.location.reload()
+    setAmount('')
+    setToAddr('')
+    setDescription('')
   }
 
   return (
