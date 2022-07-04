@@ -49,6 +49,9 @@ export default function Dashboard() {
     });
   };
 
+  //watch for fund transfer event from contract
+  // authority.watchTransferEvent(address);
+
   useEffect(() => {
     if (!address) {
       Router.push("/");

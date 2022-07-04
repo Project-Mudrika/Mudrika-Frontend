@@ -25,7 +25,9 @@ function NewFundRequest() {
     e.preventDefault();
     const res = await authority.requestFunds(amount, toAddr, description);
     alert(res);
-    // window.location.reload();
+    setAmount("");
+    setToAddr("");
+    setDescription("");
     Router.push("/dashboard");
   };
 

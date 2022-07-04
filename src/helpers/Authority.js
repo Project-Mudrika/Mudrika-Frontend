@@ -47,6 +47,17 @@ class Authority {
         return "Success";
     }
 
+    async watchTransferEvent(address) {
+        await this.fetchAccount();
+        this.Mudrika.events.fundTransferred(function (error, result) {
+            if (!error) {
+                if (result.returnValues.to.toUpperCase() == address.toUpperCase()) {
+                    alert(result.returnValues.amount + " transferred");
+                }
+            }
+        });
+    }
+
     async fetchRequests() {
         await this.fetchAccount();
         var myAccount = await window.ethereum.enable();
@@ -89,6 +100,18 @@ class Authority {
         }
 
         return requestsList;
+    }
+
+    async fetchRequestDetails(reqId) {
+        await this.fetchAccount();
+        const request = await this.Mudrika.methods.requestsReceived(reqId).call();
+        return {
+            req_id: request.requestId,
+            req_address: request.to,
+            req_authority: request.from,
+            req_amount: request.fund,
+            req_desc: request.description,
+        }
     }
 }
 
