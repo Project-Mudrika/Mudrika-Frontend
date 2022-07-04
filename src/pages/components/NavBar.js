@@ -89,7 +89,6 @@ export default function NavBar(props) {
                       }}
                     >
                       Wallet ID: {profile.data[0].accid} <br />
-                      Balance: {"₹" + parseInt(123456).toLocaleString("hi-IN")}
                     </p>
                   </NavDropdown.Item>
                   <NavDropdown.Item
