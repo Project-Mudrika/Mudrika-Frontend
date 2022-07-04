@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useWeb3 } from "@3rdweb/hooks";
 import Router from "next/router";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Spinner } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 
 import QuickAction from "./QuickAction";
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const { address } = useWeb3();
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
+  const [nullRequests, setNullRequests] = useState(false);
 
   const loaderUserData = {
     data: [
@@ -42,7 +43,10 @@ export default function Dashboard() {
     // }, 2000);
     console.log("Request approved");
     authority.fetchBalance().then((balance) => setBalance(balance));
-    authority.fetchRequests().then((requests) => setRequests(requests));
+    authority.fetchRequests().then((requests) => {
+      setRequests(requests);
+      setNullRequests(requests.length === 0);
+    });
   };
 
   useEffect(() => {
@@ -54,12 +58,15 @@ export default function Dashboard() {
 
     fetch(
       "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-      new URLSearchParams({
-        walletid: address,
-      })
+        new URLSearchParams({
+          walletid: address,
+        })
     )
       .then((res) => res.json())
-      .then((data) => setUserData(data));
+      .then((data) => setUserData(data))
+      .then(() => {
+        console.log(userData.data[0].level);
+      });
 
     authority.fetchRequests().then((requests) => setRequests(requests));
   }, []);
@@ -79,69 +86,92 @@ export default function Dashboard() {
           <Card bg="light" className={styles.Dashboard_recent_cases}>
             <Card.Body>
               <FundRequestTable>
-                {req_table_data.slice(0, 5).map((tab_data, i) => {
-                  console.log(`tab_data${i}`, tab_data);
-                  return (
-                    <tr key={i}>
-                      <td scope="col">{tab_data.req_id}</td>
-                      <td scope="col">
-                        {tab_data.req_authority.slice(0, 15) + "..."}
-                      </td>
-                      {/* <td scope="col">{tab_data.req_state}</td> */}
-                      <td scope="col">Kerala</td>
-                      <td scope="col">
-                        {"₹" +
-                          parseInt(tab_data.req_amount).toLocaleString("hi-IN")}
-                      </td>
-                      <td scope="col">
-                        {new Date("01 January 2022").toDateString() +
-                          " " +
-                          new Date("01 January 2022").toLocaleTimeString()}
-                      </td>
-                      <td scope="col" className="d-flex">
-                        <Button
-                          size="sm"
-                          style={{
-                            fontFamily: "Varela Round, sans-serif",
-                            margin: "0 0.5rem",
-                          }}
-                          variant="success"
-                          onClick={() => approveRequest(tab_data.req_id)}
-                        >
-                          <Icon icon="material-symbols:done" color="white" />
-                          Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          style={{
-                            fontFamily: "Varela Round, sans-serif",
-                            margin: "0 0.5rem",
-                          }}
-                          variant="danger"
-                        >
-                          <Icon
-                            icon="material-symbols:delete-outline-rounded"
-                            color="white"
-                          />
-                          Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          style={{
-                            fontFamily: "Varela Round, sans-serif",
-                            margin: "0 0.5rem",
-                          }}
-                          variant="link"
-                          onClick={() =>
-                            Router.push("/manageFunds/" + tab_data.req_id)
-                          }
-                        >
-                          More Info
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {req_table_data.length > 0 ? (
+                  req_table_data.slice(0, 5).map((tab_data, i) => {
+                    console.log(`tab_data${i}`, tab_data);
+                    return (
+                      <tr key={i}>
+                        <td scope="col">{tab_data.req_id}</td>
+                        <td scope="col">
+                          {tab_data.req_authority.slice(0, 15) + "..."}
+                        </td>
+                        {/* <td scope="col">{tab_data.req_state}</td> */}
+                        <td scope="col">Kerala</td>
+                        <td scope="col">
+                          {"₹" +
+                            parseInt(tab_data.req_amount).toLocaleString(
+                              "hi-IN"
+                            )}
+                        </td>
+                        <td scope="col">
+                          {new Date("01 January 2022").toDateString() +
+                            " " +
+                            new Date("01 January 2022").toLocaleTimeString()}
+                        </td>
+                        <td scope="col" className="d-flex">
+                          <Button
+                            size="sm"
+                            style={{
+                              fontFamily: "Varela Round, sans-serif",
+                              margin: "0 0.5rem",
+                            }}
+                            variant="success"
+                            onClick={(e) => {
+                              e.target.disabled = true;
+                              e.target.innerHTML =
+                                (() => {
+                                  return (
+                                    <Spinner
+                                      as="span"
+                                      animation="border"
+                                      size="sm"
+                                      role="status"
+                                      aria-hidden="true"
+                                    />
+                                  );
+                                }) + " Approving...";
+                              approveRequest(tab_data.req_id);
+                            }}
+                          >
+                            <Icon icon="material-symbols:done" color="white" />
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            style={{
+                              fontFamily: "Varela Round, sans-serif",
+                              margin: "0 0.5rem",
+                            }}
+                            variant="danger"
+                          >
+                            <Icon
+                              icon="material-symbols:delete-outline-rounded"
+                              color="white"
+                            />
+                            Reject
+                          </Button>
+                          <Button
+                            size="sm"
+                            style={{
+                              fontFamily: "Varela Round, sans-serif",
+                              margin: "0 0.5rem",
+                            }}
+                            variant="link"
+                            onClick={() =>
+                              Router.push("/manageFunds/" + tab_data.req_id)
+                            }
+                          >
+                            More Info
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : nullRequests ? (
+                  "No Requests issued"
+                ) : (
+                  <Spinner animation="grow" role={"status"} size="sm" />
+                )}
               </FundRequestTable>
             </Card.Body>
           </Card>
@@ -149,16 +179,26 @@ export default function Dashboard() {
         <h4 className="h4">Quick Actions</h4>
         <div className={styles.Dashboard_quick_actions}>
           <QuickAction
-            icon="ic:baseline-note-add"
-            text="Request Funds"
-            href="/manageFunds/newFundRequest"
-            onClick={(e) => { e.preventDefault(); Router.push('/manageFunds/newFundRequest') }}
-          />
-          <QuickAction
             icon="ic:baseline-account-balance-wallet"
             text="Manage Fund Requests"
-            href="/manageFunds"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/manageFunds");
+            }}
           />
+          {userData.data[0].level === "national" ? (
+            <QuickAction />
+          ) : (
+            <QuickAction
+              icon="ic:baseline-note-add"
+              text="Request Funds"
+              href="/manageFunds/newFundRequest"
+              onClick={(e) => {
+                e.preventDefault();
+                Router.push("/manageFunds/newFundRequest");
+              }}
+            />
+          )}
           <QuickAction />
           <QuickAction />
         </div>
