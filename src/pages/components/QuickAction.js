@@ -7,11 +7,7 @@ import styles from "../../styles/QuickAction.module.scss";
 
 function QuickAction(props) {
   return (
-    <a
-      className={styles.QuickAction}
-      href={props.href ? props.href : "#quick-action"}
-      onClick={props.onClick}
-    >
+    <a className={styles.QuickAction} onClick={props.onClick}>
       <Card className={styles.QuickAction_card}>
         <Card.Body className="d-flex flex-column justify-content-center align-items-center">
           <Icon

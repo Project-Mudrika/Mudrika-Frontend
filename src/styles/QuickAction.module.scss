@@ -3,6 +3,7 @@
 .QuickAction {
   color: initial;
   text-decoration: none;
+  cursor: pointer;
 
   @media screen and (max-width: 768px) {
     max-width: 50%;
