@@ -1,4 +1,5 @@
 import React from "react";
+import Router from "next/router";
 import NavBar from "../components/NavBar";
 
 import dashboardStyles from "../../styles/Dashboard.module.scss";
@@ -6,27 +7,27 @@ import bodyStyles from "../../styles/Home.module.scss";
 import { Form, Button, Card } from "react-bootstrap";
 import { useEffect } from "react";
 import { useState } from "react";
-import Authority from "../../helpers/HigherAuth";
+import Authority from "../../helpers/Authority";
 
 function NewFundRequest() {
-
-  const authority = new Authority()
-  const [account, setAccount] = useState('')
-  const [amount, setAmount] = useState('')
-  const [toAddr, setToAddr] = useState('')
-  const [description, setDescription] = useState('')
+  const authority = new Authority();
+  const [account, setAccount] = useState("");
+  const [amount, setAmount] = useState("");
+  const [toAddr, setToAddr] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     //fetch account address and populate the your address field
     window.ethereum.enable().then((myAccount) => setAccount(myAccount[0]));
-  })
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const res = await authority.requestFunds(amount, toAddr, description)
-    alert(res)
-    window.location.reload()
-  }
+    const res = await authority.requestFunds(amount, toAddr, description);
+    alert(res);
+    // window.location.reload();
+    Router.push("/dashboard");
+  };
 
   return (
     <div className={bodyStyles.home}>
@@ -38,7 +39,7 @@ function NewFundRequest() {
       >
         <Card.Title>Create a New Fund Request</Card.Title>
         <Card.Body>
-          <Form onSubmit={onSubmit} >
+          <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Your WalletID</Form.Label>
               <Form.Control
@@ -57,7 +58,7 @@ function NewFundRequest() {
                 type="text"
                 placeholder="Enter Higher Authority WalletID"
                 value={toAddr}
-                onInput={e => setToAddr(e.target.value)}
+                onInput={(e) => setToAddr(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -65,7 +66,7 @@ function NewFundRequest() {
               <Form.Control
                 type="number"
                 value={amount}
-                onInput={e => setAmount(e.target.value)}
+                onInput={(e) => setAmount(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3 amount">
@@ -74,7 +75,7 @@ function NewFundRequest() {
                 as="textarea"
                 placeholder="Enter Reason for Fund Request"
                 value={description}
-                onInput={e => setDescription(e.target.value)}
+                onInput={(e) => setDescription(e.target.value)}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
@@ -83,7 +84,7 @@ function NewFundRequest() {
           </Form>
         </Card.Body>
       </Card>
-    </div >
+    </div>
   );
 }
 
