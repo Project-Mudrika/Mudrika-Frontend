@@ -33,7 +33,7 @@ export default function NavBar(props) {
         })
     )
       .then((res) => res.json())
-      .then((data) => setProfile(data));
+      .then((data) => setProfile(data ? data : loaderProfile));
   }, []);
 
   return (
@@ -49,7 +49,10 @@ export default function NavBar(props) {
               {props.loginPage ? null : (
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
-                  href="/dashboard"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push("/dashboard");
+                  }}
                 >
                   Dashboard
                 </Nav.Link>
@@ -57,7 +60,10 @@ export default function NavBar(props) {
               {props.loginPage ? null : (
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
-                  href="/cases"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push("/cases");
+                  }}
                 >
                   Cases
                 </Nav.Link>
