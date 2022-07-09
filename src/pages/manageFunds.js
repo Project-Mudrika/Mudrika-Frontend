@@ -36,6 +36,19 @@ function manageFunds() {
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
 
+  const handleApprove = async (reqid) => {
+    await authority.approveRequest(reqid);
+
+    // reload after 5 seconds
+    // setTimeout(function () {
+    //   window.location.reload();
+    // }, 2000);
+    console.log("Request approved");
+    authority.fetchRequests().then((requests) => {
+      setRequests(requests);
+    });
+  }
+
   useEffect(() => {
     authority.fetchRequests().then((requests) => setRequests(requests));
   }, []);
@@ -72,6 +85,7 @@ function manageFunds() {
                           margin: "0 0.5rem",
                         }}
                         variant="success"
+                        onClick={() => handleApprove(tab_data.req_id)}
                       >
                         <Icon icon="material-symbols:done" color="white" />
                         Approve
