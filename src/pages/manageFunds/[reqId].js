@@ -20,7 +20,8 @@ function ReqId() {
     req_address: "loading",
     req_authority: "loading",
     req_amount: "loading",
-    req_desc: "loading"
+    req_desc: "loading",
+    req_time: "loading"
   };
 
   const [data, setData] = useState(loadingData);
