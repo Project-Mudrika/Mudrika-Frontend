@@ -10,6 +10,7 @@ import styles from "../../styles/Dashboard.module.scss";
 import Authority from "../../helpers/Authority";
 import { useState } from "react";
 import FundRequestTable from "./FundRequestTable";
+import UserDetails from "../../helpers/UserDetails";
 
 export default function Dashboard() {
   const { address } = useWeb3();
@@ -59,19 +60,33 @@ export default function Dashboard() {
 
     authority.fetchBalance().then((balance) => setBalance(balance));
 
-    fetch(
-      "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-        new URLSearchParams({
-          walletid: address,
-        })
-    )
-      .then((res) => res.json())
-      .then((data) => setUserData(data))
-      .then(() => {
-        console.log(userData.data[0].level);
-      });
+    // fetch(
+    //   "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
+    //     new URLSearchParams({
+    //       walletid: address,
+    //     })
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => setUserData(data))
+    //   .then(() => {
+    //     console.log(userData.data[0].level);
+    //   });
+    const userDetails = new UserDetails();
+    userDetails.fetchUserData(address).then((response) => {
+      const fetchedUserData = response.data;
+      console.log(fetchedUserData);
+      if (fetchedUserData.data[0]) {
+        setUserData(fetchedUserData);
+      } else {
+        alert("Unregistered user. Please register first.");
+        setUserData(loaderProfile);
+      }
+    });
 
-    authority.fetchRequests().then((requests) => setRequests(requests));
+    authority.fetchRequests().then((requests) => {
+      setRequests(requests);
+      setNullRequests(requests.length === 0);
+    });
   }, []);
 
   return (
@@ -82,7 +97,8 @@ export default function Dashboard() {
         </h3>
         <p className="text-muted">Account ID: {userData.data[0].accid}</p>
         <p className="text-muted">
-          Balance Amount: {"₹" + parseInt(balance).toLocaleString("hi-IN")}
+          National Disaster Relief Fund:{" "}
+          {"₹" + parseInt(balance).toLocaleString("hi-IN")}
         </p>
         <h4 className="h4">Recent Fund Requests To You</h4>
         <div className={styles.Dashboard_row}>

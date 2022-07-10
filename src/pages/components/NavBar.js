@@ -1,5 +1,6 @@
 import { Navbar, Nav, NavDropdown, Container, Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
+import UserDetails from "../../helpers/UserDetails";
 import { Icon } from "@iconify/react";
 
 import styles from "../../styles/NavBar.module.scss";
@@ -24,17 +25,27 @@ export default function NavBar(props) {
 
   const [profile, setProfile] = useState(loaderProfile);
   const { address } = useWeb3();
+  const userDetails = new UserDetails();
 
   useEffect(() => {
-    fetch(
-      "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
-        new URLSearchParams({
-          walletid: address,
-        })
-    )
-      .then((res) => res.json())
-      .then((data) => setProfile(data ? data : loaderProfile));
-  }, []);
+    if (Router.pathname !== "/" && Router.pathname !== "/register") {
+      if (!address) {
+        Router.push("/");
+      } else {
+        userDetails.fetchUserData(address).then((response) => {
+          const fetchedUserData = response.data;
+          console.log(fetchedUserData);
+          if (fetchedUserData.data.length > 0) {
+            setProfile(fetchedUserData);
+          } else {
+            // alert("Unregistered user. Please register first.");
+            setProfile(loaderProfile);
+            Router.push("/");
+          }
+        });
+      }
+    }
+  }, [address]);
 
   return (
     <div className="NavBar">
