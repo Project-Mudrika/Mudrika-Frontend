@@ -2,6 +2,7 @@ import React from "react";
 
 import styles from "../../styles/LoginCard.module.scss";
 import { Button } from "react-bootstrap";
+import Router from "next/router";
 
 function LoginCard(props) {
   return (
@@ -22,7 +23,16 @@ function LoginCard(props) {
         Sign In with MetaMask
       </Button>
       <div>
-        No account? <a href="/register">Register Here</a>
+        No account?{" "}
+        <a
+          href="/register"
+          onClick={(e) => {
+            e.preventDefault();
+            Router.push("/register");
+          }}
+        >
+          Register Here
+        </a>
       </div>
     </div>
   );
