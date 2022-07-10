@@ -17,6 +17,7 @@ function manageFunds() {
   //     req_authority: "Kerala",
   //     req_amount: 8000000,
   //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //     req_time: 1657426257
   //   },
   //   {
   //     req_id: 12023,
@@ -24,6 +25,7 @@ function manageFunds() {
   //     req_authority: "Rajasthan",
   //     req_amount: 45000000,
   //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //     req_time: 1657426257
   //   },
   //   {
   //     req_id: 12024,
@@ -31,10 +33,24 @@ function manageFunds() {
   //     req_authority: "Uttar Pradesh",
   //     req_amount: 90000000,
   //     req_desc: "Lorem Ipsum Dolor Sit Amet",
+  //     req_time: 1657426257
   //   },
   // ];
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
+
+  const handleApprove = async (reqid) => {
+    await authority.approveRequest(reqid);
+
+    // reload after 5 seconds
+    // setTimeout(function () {
+    //   window.location.reload();
+    // }, 2000);
+    console.log("Request approved");
+    authority.fetchRequests().then((requests) => {
+      setRequests(requests);
+    });
+  }
 
   useEffect(() => {
     authority.fetchRequests().then((requests) => setRequests(requests));
@@ -72,6 +88,7 @@ function manageFunds() {
                           margin: "0 0.5rem",
                         }}
                         variant="success"
+                        onClick={() => handleApprove(tab_data.req_id)}
                       >
                         <Icon icon="material-symbols:done" color="white" />
                         Approve

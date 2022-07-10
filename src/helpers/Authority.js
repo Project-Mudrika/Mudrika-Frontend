@@ -27,7 +27,7 @@ class Authority {
     constructor() {
         this.contractAbi = Mudrika.abi;
         // this.contractAddress = process.env.NEXT_PUBLIC_Contract_ID;
-        this.contractAddress = "0x7dD9387D820Dc234e0904363bbFb4813b23AD225";
+        this.contractAddress = "0x66B35758033B2A8DAf8855B5AD7674a4Cd9147a7";
 
     }
 
@@ -72,6 +72,7 @@ class Authority {
                     req_authority: request.from,
                     req_amount: request.fund,
                     req_desc: request.description,
+                    req_time: request.timestamp
                 });
             }
 

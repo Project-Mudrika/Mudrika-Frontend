@@ -20,13 +20,26 @@ function ReqId() {
     req_address: "loading",
     req_authority: "loading",
     req_amount: "loading",
-    req_desc: "loading"
+    req_desc: "loading",
+    req_time: "loading"
   };
 
   const [data, setData] = useState(loadingData);
 
 
   const authority = new Authority();
+
+
+  const handleApprove = async (reqid) => {
+    await authority.approveRequest(reqid);
+
+    // reload after 5 seconds
+    // setTimeout(function () {
+    //   window.location.reload();
+    // }, 2000);
+    alert("Request approved");
+    Router.push("/dashboard");
+  }
 
   useEffect(() => {
     if (!address) {
@@ -101,6 +114,7 @@ function ReqId() {
               margin: "0 0.5rem",
             }}
             variant="success"
+            onClick={() => handleApprove(reqId)}
           >
             <Icon icon="material-symbols:done" color="white" />
             Approve
