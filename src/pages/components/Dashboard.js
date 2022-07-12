@@ -206,7 +206,15 @@ export default function Dashboard() {
             }}
           />
           {userData.data[0].level === "national" ? (
-            <QuickAction />
+            <QuickAction
+              icon="akar-icons:key"
+              text="Generate Access Key Tokens"
+              href="/generateToken"
+              onClick={(e) => {
+                e.preventDefault();
+                Router.push("/generateToken");
+              }}
+            />
           ) : (
             <QuickAction
               icon="ic:baseline-note-add"

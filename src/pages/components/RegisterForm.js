@@ -1,7 +1,9 @@
 import { useWeb3 } from "@3rdweb/hooks";
 import axios from "axios";
+import Router from "next/router";
 import React, { useState } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Spinner, Modal } from "react-bootstrap";
+import { Icon } from "@iconify/react";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 
@@ -21,21 +23,15 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [accessLevelToken, setAccessLevelToken] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [modalShow, setModalShow] = useState(false);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    // const res = await fetch("http://mudrika.herokuapp.com/api/register/", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     acc_address: address,
-    //     first_name: firstName,
-    //     last_name: lastName,
-    //     username: username,
-    //     access_level_token: accessLevelToken,
-    //   }),
-    // });
+    setIsSubmitting(true);
+
     let registerFormData = new FormData();
     registerFormData.append("acc_address", address);
     registerFormData.append("first_name", firstName);
@@ -50,12 +46,15 @@ function RegisterForm() {
         },
       })
       .catch((err) => console.error(err));
-    const data = await res.data;
+    const data = await res?.data;
     console.log(data);
+    setIsSubmitting(false);
     setFirstName("");
     setLastName("");
     setUsername("");
     setAccessLevelToken("");
+    setIsSuccess(res?.status === 200);
+    setModalShow(true);
   };
 
   return (
@@ -76,6 +75,7 @@ function RegisterForm() {
                 name="acc_address"
                 value={address}
                 readOnly={true}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -85,6 +85,7 @@ function RegisterForm() {
                 placeholder="Enter First Name"
                 name="first_name"
                 onInput={(e) => setFirstName(e.target.value)}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -94,6 +95,7 @@ function RegisterForm() {
                 placeholder="Enter Last Name"
                 name="last_name"
                 onInput={(e) => setLastName(e.target.value)}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -103,6 +105,7 @@ function RegisterForm() {
                 placeholder="Enter Username"
                 name="username"
                 onInput={(e) => setUsername(e.target.value)}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -112,14 +115,73 @@ function RegisterForm() {
                 placeholder="Enter Access Level Token"
                 name="access_level_token"
                 onInput={(e) => setAccessLevelToken(e.target.value)}
+                required
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Register
+            <Button variant="primary" disabled={isSubmitting} type="submit">
+              {isSubmitting ? (
+                <Spinner animation="border" role={"status"} size="sm" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </Form>
         </Card.Body>
+
+        {/* <Button onClick={() => setModalShow(true)}>Show Modal</Button> */}
       </Card>
+      <Modal
+        show={modalShow}
+        size="lg"
+        backdrop="static"
+        keyboard={false}
+        centered
+        onHide={() => setModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            {isSuccess
+              ? "New User Registration Successful!"
+              : "New User Registration Failed!"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="d-flex justify-content-center align-items-center flex-column">
+          <h4>
+            {isSuccess ? (
+              <Icon width="4rem" color="#1a7a05" icon="charm:circle-tick" />
+            ) : (
+              <Icon width="4rem" color="#870303" icon="charm:circle-cross" />
+            )}{" "}
+          </h4>
+          <p>
+            {isSuccess
+              ? "Click Continue to login from home page."
+              : "Something Went Wrong. Try again"}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          {isSuccess ? (
+            <Button
+              onClick={() => {
+                setModalShow(false);
+                Router.push("/");
+              }}
+              variant="success"
+            >
+              Continue
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                setModalShow(false);
+              }}
+              variant="danger"
+            >
+              Retry
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
