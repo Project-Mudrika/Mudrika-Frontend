@@ -24,8 +24,13 @@ export default function NavBar(props) {
   };
 
   const [profile, setProfile] = useState(loaderProfile);
-  const { address } = useWeb3();
+  const { address, disconnectWallet } = useWeb3();
   const userDetails = new UserDetails();
+
+  const web3logout = async () => {
+    console.log("Sign out");
+    alert("Please Disconnect using Metamask")
+  };
 
   useEffect(() => {
     if (Router.pathname !== "/" && Router.pathname !== "/register") {
@@ -118,13 +123,16 @@ export default function NavBar(props) {
                     Show Profile
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="">Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={(e) => {
+                    e.preventDefault();
+                    web3logout();
+                  }}> Logout</NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </div>
+    </div >
   );
 }
