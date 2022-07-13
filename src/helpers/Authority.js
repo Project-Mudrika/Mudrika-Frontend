@@ -31,6 +31,12 @@ class Authority {
 
     }
 
+    async fetchMyBalance() {
+        await this.fetchAccount();
+        var account = await this.web3.eth.getAccounts();
+        return this.web3.eth.getBalance(account[0])
+    }
+
     async fetchBalance() {
         await this.fetchAccount();
         return await this.Mudrika.methods.fundRemaining().call();

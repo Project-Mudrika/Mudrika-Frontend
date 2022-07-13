@@ -34,6 +34,7 @@ export default function Dashboard() {
   };
   const [userData, setUserData] = useState(loaderUserData);
   const [balance, setBalance] = useState(0);
+  const [myBalance, setMyBalance] = useState(0);
 
   const approveRequest = async (reqid) => {
     await authority.approveRequest(reqid);
@@ -58,6 +59,7 @@ export default function Dashboard() {
       Router.push("/");
     }
 
+    authority.fetchMyBalance().then((myBalance) => setBalance(myBalance));
     authority.fetchBalance().then((balance) => setBalance(balance));
 
     // fetch(
