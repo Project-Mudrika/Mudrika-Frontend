@@ -40,7 +40,7 @@ function RegisterForm() {
     registerFormData.append("access_level_token", accessLevelToken);
 
     const res = await axios
-      .post("http://mudrika.herokuapp.com/api/register/", registerFormData, {
+      .post("https://mudrika.herokuapp.com/api/register/", registerFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

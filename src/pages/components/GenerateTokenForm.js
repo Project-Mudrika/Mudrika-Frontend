@@ -43,7 +43,7 @@ function GenerateTokenForm() {
 
     const res = await axios
       .post(
-        "http://mudrika.herokuapp.com/api/new-access-token/",
+        "https://mudrika.herokuapp.com/api/new-access-token/",
         tokenFormData,
         {
           headers: {
@@ -153,8 +153,6 @@ function GenerateTokenForm() {
               )}
             </Button>
           </Form>
-
-          {/* <Button onClick={() => setModalShow(true)}>Show Modal</Button> */}
         </Card.Body>
       </Card>
       <Modal
