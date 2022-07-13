@@ -81,24 +81,24 @@ function GenerateTokenForm() {
           <Form onSubmit={submitHandler}>
             <Form.Group>
               <Form.Label className="mt-2">Access Level</Form.Label>
-              <Form.Select
+              <select
                 name="access_level"
                 label="Access Level"
-                className="mb-2"
+                className="mb-2 form-control"
                 onChange={(e) => setAccessLevel(e.target.value)}
                 value={access_level}
               >
                 <option value="district">District</option>
                 <option value="state">State</option>
                 <option value="national">National</option>
-              </Form.Select>
+              </select>
             </Form.Group>
             <Form.Group>
               <Form.Label className="mt-2">State</Form.Label>
-              <Form.Select
+              <select
                 name="state"
                 label="State"
-                className="mb-2"
+                className="mb-2 form-control"
                 disabled={isNational}
                 required={!isNational}
                 onChange={(e) => setState(e.target.value)}
@@ -114,17 +114,17 @@ function GenerateTokenForm() {
                     });
                   return <option value={stateValue}>{stateName}</option>;
                 })}
-              </Form.Select>
+              </select>
               <Form.Control.Feedback type="invalid">
                 Please select a state.
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label className="mt-2">District</Form.Label>
-              <Form.Select
+              <select
                 name="district"
                 label="District"
-                className="mb-2"
+                className="mb-2 form-control"
                 disabled={isNational || isState || !state}
                 required={!isNational && !isState}
                 onChange={(e) => setDistrict(e.target.value)}
@@ -140,7 +140,7 @@ function GenerateTokenForm() {
                       });
                     }
                   })}
-              </Form.Select>
+              </select>
               <Form.Control.Feedback type="invalid">
                 Please select a district.
               </Form.Control.Feedback>
