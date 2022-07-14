@@ -5,7 +5,7 @@ import Router from "next/router";
 import axios from "axios";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
-import states from "./stateList";
+import states from "../../helpers/stateList";
 
 function GenerateTokenForm() {
   const [access_level, setAccessLevel] = useState("district");
