@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Modal, Button, Form, Spinner } from "react-bootstrap";
 import { Icon } from "@iconify/react";
+import Router from "next/router";
 import axios from "axios";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
@@ -25,12 +26,20 @@ function GenerateTokenForm() {
     if (access_level === "state") {
       setDistrict("");
     }
+
+    return () => {
+      setState("");
+      setDistrict("");
+      setIsNational(false);
+      setIsState(false);
+    };
   }, [access_level]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
+  const [response, setResponse] = useState({});
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -54,6 +63,7 @@ function GenerateTokenForm() {
       .catch((err) => console.error(err));
     const data = await res?.data;
     console.log(data);
+    setResponse(data);
     setIsSubmitting(false);
     setAccessLevel("");
     setState("");
@@ -183,6 +193,33 @@ function GenerateTokenForm() {
             <p>
               IMPORTANT!! Please copy the token information below before closing
               this window.
+              <blockquote
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "5px",
+                  padding: "1rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <code>Access Level Token : {response.access_phrase}</code>
+                <Button
+                  variant="light"
+                  style={{
+                    backgroundColor: "#dddddd",
+                    marginLeft: "auto",
+                  }}
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(response.access_phrase);
+                    alert("Copied to clipboard");
+                  }}
+                >
+                  <Icon width="1rem" icon="charm:copy" color="#999999" />
+                </Button>
+              </blockquote>
             </p>
           ) : (
             <p>Something Went Wrong. Try again</p>
@@ -193,7 +230,7 @@ function GenerateTokenForm() {
             <Button
               onClick={() => {
                 setModalShow(false);
-                Router.push("/");
+                Router.push("/dashboard");
               }}
               variant="success"
             >

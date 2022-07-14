@@ -98,14 +98,19 @@ export default function Dashboard() {
           Welcome, {userData.data[0].fname + " " + userData.data[0].lname}
         </h3>
         <p className="text-muted">Account ID: {userData.data[0].accid}</p>
-        <p className="text-muted">
-          National Disaster Relief Fund Balance:{" "}
-          {"₹" + parseInt(balance).toLocaleString("hi-IN")}
-        </p>
-        <p className="text-muted">
-          {userData.data[0].level.charAt(0).toUpperCase() + userData.data[0].level.slice(1)} Authority Balance:{" "}
-          {"₹" + parseInt(myBalance).toLocaleString("hi-IN")}
-        </p>
+        {userData.data[0].level == "national" || "admin" ? (
+          <p className="text-muted">
+            National Disaster Relief Fund Balance:{" "}
+            {"₹" + parseInt(balance).toLocaleString("hi-IN")}
+          </p>
+        ) : (
+          <p className="text-muted">
+            {userData.data[0].level.charAt(0).toUpperCase() +
+              userData.data[0].level.slice(1)}{" "}
+            Authority Balance:{" "}
+            {"₹" + parseInt(myBalance).toLocaleString("hi-IN")}
+          </p>
+        )}
         <h4 className="h4">Recent Fund Requests To You</h4>
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
