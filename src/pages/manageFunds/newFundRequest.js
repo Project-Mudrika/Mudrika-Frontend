@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Authority from "../../helpers/Authority";
 
+import axios from "axios";
+
 function NewFundRequest() {
   const authority = new Authority();
   const [account, setAccount] = useState("");
@@ -16,9 +18,18 @@ function NewFundRequest() {
   const [toAddr, setToAddr] = useState("");
   const [description, setDescription] = useState("");
 
+  const [nationalOfficers, setNationalOfficers] = useState([]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     //fetch account address and populate the your address field
     window.ethereum.enable().then((myAccount) => setAccount(myAccount[0]));
+
+    axios
+      .get("https://mudrika.herokuapp.com/api/fetch-national-officers/")
+      .then((response) => setNationalOfficers(response.data.data))
+      .catch((err) => console.log(err));
   }, []);
 
   const onSubmit = async (e) => {
@@ -50,18 +61,23 @@ function NewFundRequest() {
                 value={account}
                 readOnly={true}
               />
-              {/* <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text> */}
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Higher Authority WalletID</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Higher Authority WalletID"
+              <select
+                name="toAddr"
+                label="Higher Authority WalletID"
+                className="mb-2 form-control"
+                onChange={(e) => setToAddr(e.target.value)}
                 value={toAddr}
-                onInput={(e) => setToAddr(e.target.value)}
-              />
+              >
+                <option value="">-- Select Higher Authority WalletID --</option>
+                {nationalOfficers.map((officer) => (
+                  <option key={officer.accid} value={officer.accid}>
+                    {officer.fname + " " + officer.lname}
+                  </option>
+                ))}
+              </select>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Amount Needed</Form.Label>

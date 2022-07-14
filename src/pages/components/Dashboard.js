@@ -111,7 +111,10 @@ export default function Dashboard() {
             {"₹" + parseInt(myBalance).toLocaleString("hi-IN")}
           </p>
         )}
-        <h4 className="h4">Recent Fund Requests To You</h4>
+        <h4 className="h4">
+          Recent Fund Requests{" "}
+          {userData.data[0].level === "national" ? "To You" : "From You"}
+        </h4>
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
             <Card.Body>
