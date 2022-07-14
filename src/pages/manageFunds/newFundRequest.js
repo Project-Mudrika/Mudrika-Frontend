@@ -63,7 +63,7 @@ function NewFundRequest() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Higher Authority WalletID</Form.Label>
+              <Form.Label>Higher Authority Officer</Form.Label>
               <select
                 name="toAddr"
                 label="Higher Authority WalletID"
