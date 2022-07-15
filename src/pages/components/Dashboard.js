@@ -18,6 +18,8 @@ export default function Dashboard() {
   const [req_table_data, setRequests] = useState([]);
   const [nullRequests, setNullRequests] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const loaderUserData = {
     data: [
       {
@@ -37,6 +39,7 @@ export default function Dashboard() {
   const [myBalance, setMyBalance] = useState(0);
 
   const approveRequest = async (reqid) => {
+    setIsLoading(true);
     await authority.approveRequest(reqid);
 
     // reload after 5 seconds
@@ -49,6 +52,7 @@ export default function Dashboard() {
       setRequests(requests);
       setNullRequests(requests.length === 0);
     });
+    setIsLoading(false);
   };
 
   //watch for fund transfer event from contract
@@ -149,25 +153,18 @@ export default function Dashboard() {
                               margin: "0 0.5rem",
                             }}
                             variant="success"
-                            onClick={(e) => {
-                              e.target.disabled = true;
-                              e.target.innerHTML =
-                                (() => {
-                                  return (
-                                    <Spinner
-                                      as="span"
-                                      animation="border"
-                                      size="sm"
-                                      role="status"
-                                      aria-hidden="true"
-                                    />
-                                  );
-                                }) + " Approving...";
-                              approveRequest(tab_data.req_id);
-                            }}
+                            disabled={isLoading}
+                            onClick={(e) => approveRequest(tab_data.req_id)}
                           >
-                            <Icon icon="material-symbols:done" color="white" />
-                            Approve
+                            {isLoading ? (
+                              <Spinner animation="border" size="sm" />
+                            ) : (
+                              <Icon
+                                icon="material-symbols:done"
+                                color="white"
+                              />
+                            )}
+                            {isLoading ? "Approving..." : "Approve"}
                           </Button>
                           <Button
                             size="sm"
