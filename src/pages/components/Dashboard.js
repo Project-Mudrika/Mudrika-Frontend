@@ -237,7 +237,15 @@ export default function Dashboard() {
               }}
             />
           )}
-          <QuickAction />
+          <QuickAction
+            icon="fa6-solid:truck"
+            text="Consignment Request"
+            href="/consignments"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/consignments");
+            }}
+          />
           <QuickAction />
         </div>
       </div>

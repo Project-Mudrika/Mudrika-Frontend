@@ -1,0 +1,17 @@
+@import "./color_scheme.module";
+
+.RegisterSelect {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+  .RegisterSelectCard {
+    background-color: map-get($map: $custom-theme, $key: white-100);
+    box-shadow: 4px 4px 12px rgba(36, 31, 31, 0.13);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

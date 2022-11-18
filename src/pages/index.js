@@ -22,16 +22,19 @@ export default function Home() {
   useEffect(() => {
     if (address) {
       console.log("Address present", address);
-      userDetails.fetchUserData(address).then((response) => {
-        const userData = response.data.data;
-        if (userData.length > 0) {
-          console.log("Address exists and valid");
-          Router.push("/dashboard");
-        } else {
-          console.log("Address exists but invalid");
-          alert("Unregistered user. Please register first");
-        }
-      });
+      // userDetails.fetchUserData(address).then((response) => {
+      //   const userData = response.data.data;
+      //   if (userData.length > 0) {
+      //     console.log("Address exists and valid");
+      //     Router.push("/dashboard");
+      //   } else {
+      //     console.log("Address exists but invalid");
+      //     alert("Unregistered user. Please register first");
+      //   }
+      // }
+      // );
+      Router.push("/dashboard");
+
     }
   }, [address]);
 
