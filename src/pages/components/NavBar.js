@@ -29,7 +29,7 @@ export default function NavBar(props) {
 
   const web3logout = async () => {
     console.log("Sign out");
-    alert("Please Disconnect using Metamask")
+    alert("Please Disconnect using Metamask");
   };
 
   useEffect(() => {
@@ -61,8 +61,8 @@ export default function NavBar(props) {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className={styles.Navbar_list}>
-              {props.loginPage ? null : (
+            {props.loginPage ? null : (
+              <Nav className={styles.Navbar_list}>
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
                   onClick={(e) => {
@@ -72,8 +72,6 @@ export default function NavBar(props) {
                 >
                   Dashboard
                 </Nav.Link>
-              )}
-              {props.loginPage ? null : (
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
                   onClick={(e) => {
@@ -83,8 +81,18 @@ export default function NavBar(props) {
                 >
                   Cases
                 </Nav.Link>
-              )}
-            </Nav>
+                <Nav.Link
+                  className={`${styles.Navbar_list_item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push("/consignments");
+                  }}
+                >
+                  Consignments
+                </Nav.Link>
+              </Nav>
+            )}
+
             <Nav>
               {props.loginPage ? null : (
                 <NavDropdown
@@ -123,16 +131,21 @@ export default function NavBar(props) {
                     Show Profile
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={(e) => {
-                    e.preventDefault();
-                    web3logout();
-                  }}> Logout</NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={(e) => {
+                      e.preventDefault();
+                      web3logout();
+                    }}
+                  >
+                    {" "}
+                    Logout
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </div >
+    </div>
   );
 }

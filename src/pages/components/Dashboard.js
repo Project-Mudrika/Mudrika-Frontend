@@ -243,7 +243,7 @@ export default function Dashboard() {
             href="/consignments"
             onClick={(e) => {
               e.preventDefault();
-              Router.push("/consignments");
+              Router.push("/consignments/newConsignment");
             }}
           />
           <QuickAction />
