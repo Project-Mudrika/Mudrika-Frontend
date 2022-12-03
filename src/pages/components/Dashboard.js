@@ -85,7 +85,7 @@ export default function Dashboard() {
         setUserData(fetchedUserData);
       } else {
         alert("Unregistered user. Please register first.");
-        setUserData(loaderProfile);
+        setUserData(loaderUserData);
       }
     });
 
@@ -246,7 +246,15 @@ export default function Dashboard() {
               Router.push("/consignments");
             }}
           />
-          <QuickAction />
+          <QuickAction
+            icon="fa6-solid:truck"
+            text="Manage Consignment"
+            href="/consignments"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/consignments");
+            }}
+          />
         </div>
       </div>
     </div>
