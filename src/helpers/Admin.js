@@ -25,7 +25,7 @@ class Admin {
 
     constructor() {
         this.contractAbi = Mudrika.abi;
-        this.contractAddress = process.env.REACT_APP_Contract_ID;
+        this.contractAddress = process.env.NEXT_PUBLIC_Contract_ID;
     }
 
     async addUser(account, name, userType) {
