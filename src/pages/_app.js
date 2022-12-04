@@ -6,8 +6,8 @@ import "regenerator-runtime/runtime";
 
 const supportedChainIds = [137, 1337, 80001, 4];
 const connectors = {
-  injected: {}
-}
+  injected: {},
+};
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
     >
       <Component {...pageProps} />
     </ThirdwebWeb3Provider>
-  )
+  );
 }
 
 export default MyApp;

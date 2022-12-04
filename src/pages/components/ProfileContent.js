@@ -31,7 +31,7 @@ function ProfileContent() {
     }
 
     fetch(
-      "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
+      "https://mudrika.onrender.com/api/fetch-user-data/?" +
         new URLSearchParams({
           walletid: address,
         })

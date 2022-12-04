@@ -52,7 +52,7 @@ function GenerateTokenForm() {
 
     const res = await axios
       .post(
-        "https://mudrika.herokuapp.com/api/new-access-token/",
+        "https://mudrika.onrender.com/api/new-access-token/",
         tokenFormData,
         {
           headers: {
