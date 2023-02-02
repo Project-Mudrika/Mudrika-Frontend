@@ -67,7 +67,7 @@ export default function Dashboard() {
     authority.fetchBalance().then((balance) => setBalance(balance));
 
     // fetch(
-    //   "https://mudrika.herokuapp.com/api/fetch-user-data/?" +
+    //   `${process.env.API_URL}/api/fetch-user-data/?` +
     //     new URLSearchParams({
     //       walletid: address,
     //     })
@@ -237,7 +237,15 @@ export default function Dashboard() {
               }}
             />
           )}
-          <QuickAction />
+          <QuickAction
+            icon="fa6-solid:truck"
+            text="Consignment Request"
+            href="/consignments"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/consignments/newConsignment");
+            }}
+          />
           <QuickAction />
         </div>
       </div>

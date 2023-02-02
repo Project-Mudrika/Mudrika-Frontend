@@ -1,8 +1,8 @@
 import React from "react";
-import NavBar from "./components/NavBar";
-import RegisterForm from "./components/RegisterForm";
+import NavBar from "../components/NavBar";
+import RegisterForm from "../components/RegisterForm";
 
-import styles from "../styles/Home.module.scss";
+import styles from "../../styles/Home.module.scss";
 
 function Register() {
   return (
