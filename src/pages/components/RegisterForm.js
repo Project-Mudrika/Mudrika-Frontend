@@ -40,7 +40,7 @@ function RegisterForm() {
     registerFormData.append("access_level_token", accessLevelToken);
 
     const res = await axios
-      .post("https://mudrika.onrender.com/api/register/", registerFormData, {
+      .post(`${process.env.API_URL}/api/register/`, registerFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

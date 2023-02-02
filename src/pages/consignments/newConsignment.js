@@ -41,7 +41,7 @@ function NewConsignmentRequest() {
     window.ethereum.enable().then((myAccount) => setSender(myAccount[0]));
 
     axios
-      .get("https://mudrika.onrender.com/api/fetch-national-officers/")
+      .get(`${process.env.API_URL}/api/fetch-national-officers/`)
       .then((response) => setNationalOfficers(response.data.data))
       .catch((err) => console.log(err));
 
@@ -61,7 +61,7 @@ function NewConsignmentRequest() {
     consignFormData.append("sender", sender);
     consignFormData.append("receiver", toAddr);
 
-    const consignFormUrl = "https://mudrika.onrender.com/api/new-consignment/";
+    const consignFormUrl = `${process.env.API_URL}/api/new-consignment/`;
     const res = await axios.post(consignFormUrl, consignFormData, {
       headers: {
         "Content-Type": "multipart/form-data",

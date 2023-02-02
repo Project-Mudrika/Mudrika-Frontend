@@ -27,7 +27,7 @@ function NewFundRequest() {
     window.ethereum.enable().then((myAccount) => setAccount(myAccount[0]));
 
     axios
-      .get("https://mudrika.onrender.com/api/fetch-national-officers/")
+      .get(`${process.env.API_URL}/api/fetch-national-officers/`)
       .then((response) => setNationalOfficers(response.data.data))
       .catch((err) => console.log(err));
   }, []);

@@ -11,7 +11,7 @@ class UserDetails {
     console.log("Received wallet ID", walletId);
 
     this.userData = axios
-      .get("https://mudrika.onrender.com/api/fetch-user-data/?", {
+      .get(`${process.env.API_URL}/api/fetch-user-data/?`, {
         responseType: "json",
         params: {
           walletid: walletId,
