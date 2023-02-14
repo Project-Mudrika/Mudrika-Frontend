@@ -33,7 +33,7 @@ export default function NavBar(props) {
   };
 
   useEffect(() => {
-    if (Router.pathname !== "/" && Router.pathname !== "/register") {
+    if (!/^\/$|^\/register(\/.*)?$/.test(Router.pathname)) {
       if (!address) {
         Router.push("/");
       } else {
