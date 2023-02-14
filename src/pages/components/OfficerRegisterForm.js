@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 
-function RegisterForm() {
+function OfficerRegisterForm() {
   // sign up form data
   // {
   // "acc_address": "577g9H03rH09kT6hf",
@@ -17,7 +17,13 @@ function RegisterForm() {
   // "access_level_token": "7687yodf08ha"
   // }
 
-  const { address } = useWeb3();
+  const { address, connectWallet } = useWeb3();
+
+  const web3login = async () => {
+    console.log("Connected");
+    connectWallet("injected");
+  };
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -69,14 +75,31 @@ function RegisterForm() {
           <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3">
               <Form.Label>Your WalletID</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter WalletID"
-                name="acc_address"
-                value={address}
-                readOnly={true}
-                required
-              />
+              <div className="d-flex align-items-center">
+                <Form.Control
+                  type="text"
+                  placeholder="Click Connect with Metamask for WalletID"
+                  name="acc_address"
+                  style={{ flexGrow: 1, marginRight: "8px" }}
+                  value={address}
+                  readOnly={true}
+                  required
+                />
+                {address ? null : (
+                  <Button
+                    variant="primary"
+                    style={{ flexShrink: 0, whiteSpace: "nowrap" }}
+                    onClick={web3login}
+                  >
+                    <img
+                      src="/metamask.svg"
+                      alt=""
+                      style={{ width: "1.5rem", marginRight: 4 }}
+                    />
+                    Connect with Metamask
+                  </Button>
+                )}
+              </div>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>First Name</Form.Label>
@@ -186,4 +209,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default OfficerRegisterForm;
