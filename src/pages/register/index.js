@@ -10,7 +10,9 @@ function Register() {
   const handleOfficerClick = () => {
     Router.push("/register/officer-registration");
   };
-  const handleVolunteerClick = () => {};
+  const handleVolunteerClick = () => {
+    Router.push("/register/volunteer-registration");
+  };
 
   return (
     <div className={styles.home}>
