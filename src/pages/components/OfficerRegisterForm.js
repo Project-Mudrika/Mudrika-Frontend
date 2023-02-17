@@ -46,7 +46,7 @@ function OfficerRegisterForm() {
     registerFormData.append("access_level_token", accessLevelToken);
 
     const res = await axios
-      .post(`${process.env.API_URL}/api/register/`, registerFormData, {
+      .post(`${process.env.API_URL}/api/register/officer/`, registerFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -70,7 +70,7 @@ function OfficerRegisterForm() {
         className={dashStyles.Dashboard_recent_cases}
         style={{ padding: "2rem" }}
       >
-        <Card.Title>Register New User Account</Card.Title>
+        <Card.Title>Register New Officer Account</Card.Title>
         <Card.Body>
           <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3">
