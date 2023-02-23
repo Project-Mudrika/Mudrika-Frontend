@@ -32,7 +32,7 @@ export default function Home() {
     // Random user data
     updataUserData({
       walletId: "0x5f6372254fc0a0f71ba3eccc678c85cd37e95d50",
-      type: "authority",
+      type: "volunteer",
       data: {
         text: "random text",
       },

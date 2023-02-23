@@ -12,7 +12,7 @@ import { useState } from "react";
 import FundRequestTable from "./FundRequestTable";
 import UserDetails from "../../helpers/UserDetails";
 
-export default function Dashboard() {
+export default function OfficerDashboard() {
   const { address } = useWeb3();
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
