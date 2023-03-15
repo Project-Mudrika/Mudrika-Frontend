@@ -23,47 +23,39 @@ export default function Home() {
   const userDetails = new UserDetails();
 
   const userData = useStoreState((state) => state.userData);
-  const updataUserData = useStoreActions((actions) => actions.updateData);
 
   useEffect(() => {
-    // Testing state management
-    console.log("User Data Store Content: ", userData);
+    console.log("Metamask Address: ", address);
 
-    // Random user data
-    updataUserData({
-      walletId: "0x5f6372254fc0a0f71ba3eccc678c85cd37e95d50",
-      type: "volunteer",
-      data: {
-        text: "random text",
-      },
-    });
+    const initUser = async () => {
+      await userDetails.initUserData(address);
 
-    if (address) {
-      console.log("Address present", address);
+      console.log("Login page store data after init:", userData);
 
-      // userDetails.fetchUserData(address).then((response) => {
-      //   const userData = response.data.data;
-      //   if (userData.length > 0) {
-      //     console.log("Address exists and valid");
-      //     Router.push("/dashboard");
-      //   } else {
-      //     console.log("Address exists but invalid");
-      //     alert("Unregistered user. Please register first");
-      //   }
-      // });
-
-      // Router.push("/dashboard");
-
-      // API-less testing
-
-      if (userData.type) {
-        console.log("Address exists and valid");
-        Router.push("/dashboard");
-      } else {
-        console.log("Address exists but invalid");
-        alert("Unregistered user. Please register first");
+      if (address) {
+        // userDetails.fetchUserData(address).then((response) => {
+        //   const userData = response.data.data;
+        //   if (userData.length > 0) {
+        //     console.log("Address exists and valid");
+        //     Router.push("/dashboard");
+        //   } else {
+        //     console.log("Address exists but invalid");
+        //     alert("Unregistered user. Please register first");
+        //   }
+        // });
+        // Router.push("/dashboard");
+        // API-less testing
+        // if (userData.type) {
+        //   console.log("Address exists and valid");
+        //   Router.push("/dashboard");
+        // } else {
+        //   console.log("Address exists but invalid");
+        //   alert("Unregistered user. Please register first");
+        // }
       }
-    }
+    };
+
+    initUser();
   }, [address]);
 
   return (
