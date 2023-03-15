@@ -1,0 +1,61 @@
+@import "./color_scheme.module";
+
+.VolunteerDash {
+  padding: 2rem 5rem;
+  .VolunteerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+    .VolunteerImage {
+      border-radius: 10000px;
+      width: 7rem;
+      height: 7rem;
+      object-fit: cover;
+      flex-grow: 0;
+    }
+    .VolunteerDetails {
+      flex-grow: 1;
+      flex-shrink: 0;
+      padding: 0 1rem;
+    }
+    .VolunteerContact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .SectionHeading {
+    color: map-get($map: $custom-theme, $key: stone);
+  }
+  .about {
+    font-family: "Yrsa", serif;
+    margin-bottom: 4rem;
+  }
+
+  .VolunteerBadges {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+    .VolunteerBadge {
+      width: 8rem;
+      height: 8rem;
+      margin-right: 4rem;
+      padding: 1rem;
+      border-radius: 4px;
+      :hover {
+        background-color: #48483b11;
+        cursor: pointer;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.5s;
+      }
+      :active {
+        background-color: #48483b03;
+        cursor: pointer;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.062);
+        transition: all 0.1s;
+      }
+    }
+  }
+}
