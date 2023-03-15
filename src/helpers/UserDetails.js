@@ -1,27 +1,42 @@
 import axios from "axios";
 
+import { useStoreState } from "easy-peasy";
+import { store } from "../features/userData"; // assuming your store is defined in ./store.js
+
+import Router from "next/router";
+
 class UserDetails {
   constructor() {
     this.walletId = "";
-    this.userData = {};
   }
 
-  async fetchUserData(walletId) {
+  async initUserData(walletId) {
     this.walletId = walletId;
-    console.log("Received wallet ID", walletId);
+    console.log("Received wallet ID in initUserData", walletId);
 
-    this.userData = axios
-      .get(`${process.env.API_URL}/api/fetch-user-data/?`, {
-        responseType: "json",
-        params: {
-          walletid: walletId,
-        },
-      })
-      .catch((error) => {
+    if (walletId) {
+      try {
+        let response = await axios.get(
+          `${process.env.API_URL}/api/fetch-user-data/`,
+          {
+            responseType: "json",
+            params: {
+              walletId: walletId,
+            },
+          }
+        );
+
+        let fetchedUserData = await response.data;
+
+        console.log("FEtched User Data: ", fetchedUserData);
+
+        await store.getActions().updateData(fetchedUserData);
+
+        Router.push("/dashboard");
+      } catch (error) {
         console.log(error);
-      });
-
-    return this.userData;
+      }
+    }
   }
 }
 
