@@ -65,7 +65,8 @@ export default function OfficerDashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
         <h3 className="h2">
-          Welcome, {userDetails.data[0].fname + " " + userDetails.data[0].lname}
+          Welcome,{" "}
+          {userDetails.data[0]?.fname + " " + userDetails.data[0]?.lname}
         </h3>
         <p className="text-muted">Account ID: {userDetails.data[0].walletid}</p>
         {userDetails.data[0].level == "national" || "admin" ? (
