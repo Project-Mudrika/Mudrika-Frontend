@@ -7,7 +7,7 @@ import styles from "../../styles/NavBar.module.scss";
 import Router from "next/router";
 import { useWeb3 } from "@3rdweb/hooks";
 
-export default function NavBar(props) {
+export default function NavBar({ loginPage }) {
   const loaderProfile = {
     data: [
       {
@@ -33,7 +33,7 @@ export default function NavBar(props) {
   };
 
   useEffect(() => {
-    if (!/^\/$|^\/register(\/.*)?$/.test(Router.pathname)) {
+    if (!(/^\/$|^\/register(\/.*)?$/.test(Router.pathname) || loginPage)) {
       if (!address) {
         Router.push("/");
       } else {
@@ -61,7 +61,7 @@ export default function NavBar(props) {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {props.loginPage ? null : (
+            {loginPage ? null : (
               <Nav className={styles.Navbar_list}>
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
@@ -94,7 +94,7 @@ export default function NavBar(props) {
             )}
 
             <Nav>
-              {props.loginPage ? null : (
+              {loginPage ? null : (
                 <NavDropdown
                   title={
                     <Icon

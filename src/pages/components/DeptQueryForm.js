@@ -3,8 +3,8 @@ import { Card, Modal, Button, Form, Spinner } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import Router from "next/router";
 import axios from "axios";
-import DatePicker from "react-datepicker"; // Import datepicker library
-import "react-datepicker/dist/react-datepicker.css"; // Import datepicker CSS
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 import states from "../../helpers/stateList";
@@ -43,8 +43,8 @@ function DeptQueryForm() {
   const [modalShow, setModalShow] = useState(false);
   const [response, setResponse] = useState({});
 
-  const [startDate, setSelectedDate] = useState(null); // Initialize selected date as null
-  const [endDate, setSelectDate] = useState(null);
+  const [startDate, setStartDate] = useState(""); // Initialize selected date as null
+  const [endDate, setEndDate] = useState("");
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -69,8 +69,8 @@ function DeptQueryForm() {
     setAccessLevel("");
     setState("");
     setDistrict("");
-    setSelectedDate(null); // Reset selected date to null after form submission
-    setSelectDate(null);
+    setStartDate(null); // Reset selected date to null after form submission
+    setEndDate(null);
     setIsSuccess(res?.status === 200);
     setModalShow(true);
   };
@@ -92,13 +92,17 @@ function DeptQueryForm() {
       >
         <Card.Title>Search By Department ID</Card.Title>
         <Card.Body>
-          <Form onSubmit={submitHandler}>
-            <Form.Group>
-              <Form.Label className="mt-2">Access Level</Form.Label>
+          <Form
+            onSubmit={submitHandler}
+            className={"d-flex align-items-center justify-content-center"}
+          >
+            <Form.Group className="d-flex align-items-center">
+              <Form.Label style={{ marginRight: 8 }}>Access Level</Form.Label>
               <select
                 name="access_level"
                 label="Access Level"
                 className="mb-2 form-control"
+                style={{ width: 150 }}
                 onChange={(e) => setAccessLevel(e.target.value)}
                 value={access_level}
               >
@@ -155,31 +159,31 @@ function DeptQueryForm() {
                     }
                   })}
               </select>
-</Form.Group>
-<Form.Group>
-<Form.Label className="mt-2">Select Date Range:</Form.Label>
-<br />
-<DatePicker
-selected={startDate}
-onChange={(date) => setSelectedDate(date)}
-selectsStart
-startDate={startDate}
-endDate={endDate}
-/>
-<DatePicker
-selected={endDate}
-onChange={(date) => setSelectDate(date)}
-selectsEnd
-startDate={startDate}
-endDate={endDate}
-minDate={startDate}
-/>
-</Form.Group>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label className="mt-2">Select Start Date:</Form.Label>
+              <br />
+              <Form.Control
+                type="date"
+                onChange={(e) => setStartDate(e.target.value)}
+                value={startDate}
+              />
+            </Form.Group>
 
-<Form.Control.Feedback type="invalid">
-                Please select a district.
-              </Form.Control.Feedback>
-            
+            <Form.Group>
+              <Form.Label className="mt-2">Select End Date:</Form.Label>
+              <Form.Control
+                type="date"
+                onChange={(e) => setEndDate(e.target.value)}
+                value={endDate}
+                min={startDate}
+              />
+            </Form.Group>
+
+            <Form.Control.Feedback type="invalid">
+              Please select a district.
+            </Form.Control.Feedback>
+
             <Button variant="primary" type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <Spinner animation="border" role={"status"} size="sm" />
