@@ -3,8 +3,6 @@ import { Card, Modal, Button, Form, Spinner } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import Router from "next/router";
 import axios from "axios";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 import states from "../../helpers/stateList";
@@ -90,14 +88,14 @@ function DeptQueryForm() {
         className={dashStyles.Dashboard_recent_cases}
         style={{ padding: "2rem" }}
       >
-        <Card.Title>Search By Department ID</Card.Title>
+        <Card.Title>Search By Department</Card.Title>
         <Card.Body>
           <Form
             onSubmit={submitHandler}
-            className={"d-flex align-items-center justify-content-center"}
+            className={"d-flex align-items-center justify-content-center flex-wrap"}
           >
-            <Form.Group className="d-flex align-items-center">
-              <Form.Label style={{ marginRight: 8 }}>Access Level</Form.Label>
+            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Dept. Level</Form.Label>
               <select
                 name="access_level"
                 label="Access Level"
@@ -111,8 +109,8 @@ function DeptQueryForm() {
                 <option value="national">National</option>
               </select>
             </Form.Group>
-            <Form.Group>
-              <Form.Label className="mt-2">State</Form.Label>
+            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }} >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>State</Form.Label>
               <select
                 name="state"
                 label="State"
@@ -137,8 +135,8 @@ function DeptQueryForm() {
                 Please select a state.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
-              <Form.Label className="mt-2">District</Form.Label>
+            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>District</Form.Label>
               <select
                 name="district"
                 label="District"
@@ -160,31 +158,32 @@ function DeptQueryForm() {
                   })}
               </select>
             </Form.Group>
-            <Form.Group>
-              <Form.Label className="mt-2">Select Start Date:</Form.Label>
-              <br />
-              <Form.Control
-                type="date"
-                onChange={(e) => setStartDate(e.target.value)}
-                value={startDate}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label className="mt-2">Select End Date:</Form.Label>
-              <Form.Control
-                type="date"
-                onChange={(e) => setEndDate(e.target.value)}
-                value={endDate}
-                min={startDate}
-              />
-            </Form.Group>
+            <div style={{ flexBasis: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select Start Date:</Form.Label>
+                <br />
+                <Form.Control
+                  type="date"
+                  onChange={(e) => setStartDate(e.target.value)}
+                  value={startDate}
+                />
+              </Form.Group>
+              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select End Date:</Form.Label>
+                <Form.Control
+                  type="date"
+                  onChange={(e) => setEndDate(e.target.value)}
+                  value={endDate}
+                  min={startDate}
+                />
+              </Form.Group>
+            </div>
 
             <Form.Control.Feedback type="invalid">
               Please select a district.
             </Form.Control.Feedback>
 
-            <Button variant="primary" type="submit" disabled={isSubmitting}>
+            <Button variant="primary" type="submit" disabled={isSubmitting} style={{ flexBasis: "100%", width: "fit-content" }}>
               {isSubmitting ? (
                 <Spinner animation="border" role={"status"} size="sm" />
               ) : (
