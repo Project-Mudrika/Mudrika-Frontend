@@ -11,7 +11,7 @@ function Retrieve() {
     Router.push("/public/search-casequery");
   };
   const handleDeptClick = () => {
-    Router.push("/register/volunteer-registration");
+    Router.push("/public/department");
   };
 
   return (
@@ -25,7 +25,7 @@ function Retrieve() {
           height: "50px",
           display: "flex",
           alignItems: "center",
-         
+
           justifyContent: "space-evenly",
         }}
       >
@@ -42,7 +42,7 @@ function Retrieve() {
           type="dept"
           icon="heroicons:building-office-2-20-solid"
           title="Search by Department"
-         description="View the activity by searching with department"
+          description="View the activity by searching with department"
           //footer_text="Requires Metamask Wallet Account"
           onClick={handleDeptClick}
         />
