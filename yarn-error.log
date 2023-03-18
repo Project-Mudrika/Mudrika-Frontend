@@ -1,23 +1,21 @@
 Arguments: 
-  /home/arya/.nvm/versions/node/v19.7.0/bin/node /home/arya/.local/share/pnpm/global/5/node_modules/yarn/bin/yarn.js set version stable
+  /home/deepika/.local/share/pnpm/nodejs/16.15.1/bin/node /mnt/c/Program Files (x86)/Yarn/bin/yarn.js
 
 PATH: 
-  /home/arya/.local/share/pnpm:/home/arya/.nvm/versions/node/v19.7.0/bin:/home/arya/.local/share/pnpm:/home/arya/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+  /home/deepika/.local/share/pnpm:/home/deepika/.vscode-server/bin/441438abd1ac652551dbe4d408dfcec8a499b8bf/bin/remote-cli:/home/deepika/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Flutter/flutter/bin:/mnt/c/Program Files/Python310/Scripts/:/mnt/c/Program Files/Python310/:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/MinGW/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/php-8.1.0:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files (x86)/Yarn/bin/:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin/:/mnt/c/Users/deepika/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/deepika/AppData/Local/Programs/MiKTeX/miktex/bin/x64/:/mnt/c/Program Files/CodeBlocks/MinGW/bin:/mnt/c/Users/deepika/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/deepika/AppData/Roaming/npm:/mnt/c/Users/deepika/AppData/Local/Yarn/bin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  19.7.0
+  16.15.1
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: https://github.com/yarnpkg/berry/raw/master/packages/yarnpkg-cli/bin/yarn.js: ETIMEDOUT
-      at Timeout._onTimeout (/home/arya/.local/share/pnpm/global/5/.pnpm/yarn@1.22.19/node_modules/yarn/lib/cli.js:141550:19)
-      at listOnTimeout (node:internal/timers:568:17)
-      at process.processTimers (node:internal/timers:511:7)
+  Error: connect EHOSTUNREACH 104.16.20.35:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1187:16)
 
 npm manifest: 
   {
