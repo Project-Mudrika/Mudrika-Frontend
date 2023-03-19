@@ -51,7 +51,7 @@ export default function NavBar(props) {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {props.loginPage ? null : (
+            {loginPage ? null : (
               <Nav className={styles.Navbar_list}>
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
@@ -84,7 +84,7 @@ export default function NavBar(props) {
             )}
 
             <Nav>
-              {props.loginPage ? null : (
+              {loginPage ? null : (
                 <NavDropdown
                   title={
                     <Icon
