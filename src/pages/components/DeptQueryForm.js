@@ -61,7 +61,7 @@ function DeptQueryForm() {
       })
       .catch((err) => console.error(err));
     const data = await res?.data;
-    console.log(data);
+
     setResponse(data);
     setIsSubmitting(false);
     setAccessLevel("");
@@ -92,10 +92,17 @@ function DeptQueryForm() {
         <Card.Body>
           <Form
             onSubmit={submitHandler}
-            className={"d-flex align-items-center justify-content-center flex-wrap"}
+            className={
+              "d-flex align-items-center justify-content-center flex-wrap"
+            }
           >
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Dept. Level</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                Dept. Level
+              </Form.Label>
               <select
                 name="access_level"
                 label="Access Level"
@@ -109,8 +116,13 @@ function DeptQueryForm() {
                 <option value="national">National</option>
               </select>
             </Form.Group>
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }} >
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>State</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                State
+              </Form.Label>
               <select
                 name="state"
                 label="State"
@@ -135,8 +147,13 @@ function DeptQueryForm() {
                 Please select a state.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>District</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                District
+              </Form.Label>
               <select
                 name="district"
                 label="District"
@@ -158,9 +175,21 @@ function DeptQueryForm() {
                   })}
               </select>
             </Form.Group>
-            <div style={{ flexBasis: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select Start Date:</Form.Label>
+            <div
+              style={{
+                flexBasis: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Form.Group
+                className="d-flex align-items-center"
+                style={{ marginRight: 16 }}
+              >
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                  Select Start Date:
+                </Form.Label>
                 <br />
                 <Form.Control
                   type="date"
@@ -168,8 +197,13 @@ function DeptQueryForm() {
                   value={startDate}
                 />
               </Form.Group>
-              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select End Date:</Form.Label>
+              <Form.Group
+                className="d-flex align-items-center"
+                style={{ marginRight: 16 }}
+              >
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                  Select End Date:
+                </Form.Label>
                 <Form.Control
                   type="date"
                   onChange={(e) => setEndDate(e.target.value)}
@@ -183,7 +217,12 @@ function DeptQueryForm() {
               Please select a district.
             </Form.Control.Feedback>
 
-            <Button variant="primary" type="submit" disabled={isSubmitting} style={{ flexBasis: "100%", width: "fit-content" }}>
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isSubmitting}
+              style={{ flexBasis: "100%", width: "fit-content" }}
+            >
               {isSubmitting ? (
                 <Spinner animation="border" role={"status"} size="sm" />
               ) : (

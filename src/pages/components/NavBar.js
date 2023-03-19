@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import styles from "../../styles/NavBar.module.scss";
 import Router from "next/router";
 
-export default function NavBar(props) {
+export default function NavBar({ loginPage }) {
   // User details stored
   const userDetails = useStoreState((state) => state.userData);
 
@@ -24,7 +24,7 @@ export default function NavBar(props) {
   };
 
   useEffect(() => {
-    if (!/^\/$|^\/register(\/.*)?$/.test(Router.pathname)) {
+    if (!(/^\/$|^\/register(\/.*)?$/.test(Router.pathname) || loginPage)) {
       if (!userDetails.type) {
         Router.push("/");
       } else {

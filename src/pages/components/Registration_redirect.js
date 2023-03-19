@@ -15,9 +15,13 @@ function RegistrationCard({ icon, title, description, footer_text, onClick }) {
           <Card.Title>{title}</Card.Title>
           <Card.Text className="text-muted">{description}</Card.Text>
         </Card.Body>
-        <Card.Footer>
-          <small className="text-muted">{footer_text}</small>
-        </Card.Footer>
+        {footer_text ? (
+          <Card.Footer>
+            <small className="text-muted">{footer_text}</small>
+          </Card.Footer>
+        ) : (
+          ""
+        )}
       </Card>
     </a>
   );
