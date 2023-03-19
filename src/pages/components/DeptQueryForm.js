@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Card, Modal, Button, Form, Spinner } from "react-bootstrap";
+import {
+  Card,
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Table,
+  Tabs,
+  Tab,
+} from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import Router from "next/router";
 import axios from "axios";
@@ -14,6 +23,65 @@ function DeptQueryForm() {
 
   const [isNational, setIsNational] = useState(false);
   const [isState, setIsState] = useState(false);
+
+  const [transactions, setTransactions] = useState([]);
+
+  const tableData = {
+    dma_name: "District Disaster Management Authority",
+    state_name: "Kerala",
+    district_name: "Ernakulam",
+    incoming: [
+      {
+        type: "consignment",
+        consignment_name: "Food Supplies",
+        from: {
+          level: "district",
+          name: "District Disaster Management Authority",
+          state: "Kerala",
+          district: "Thrissur",
+        },
+        amount: 500.0,
+        timestamp: 1647590400,
+      },
+      {
+        type: "fund",
+        reason: "COVID-19 relief",
+        from: {
+          level: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        amount: 2000.0,
+        timestamp: 1647945600,
+      },
+    ],
+    outgoing: [
+      {
+        type: "consignment",
+        consignment_name: "Medical Supplies",
+        to: {
+          level: "district",
+          name: "District Disaster Management Authority",
+          state: "Kerala",
+          district: "Thrissur",
+        },
+        amount: 750.0,
+        timestamp: 1645766400,
+      },
+      {
+        type: "fund",
+        reason: "Disaster response",
+        to: {
+          level: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        amount: 1000.0,
+        timestamp: 1646414400,
+      },
+    ],
+  };
+
   useEffect(() => {
     setIsNational(access_level === "national");
     setIsState(access_level === "state");
@@ -181,6 +249,7 @@ function DeptQueryForm() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                marginTop: "15px",
               }}
             >
               <Form.Group
@@ -221,7 +290,11 @@ function DeptQueryForm() {
               variant="primary"
               type="submit"
               disabled={isSubmitting}
-              style={{ flexBasis: "100%", width: "fit-content" }}
+              style={{
+                marginTop: "20px",
+                flexBasis: "10%",
+                width: "fit-content",
+              }}
             >
               {isSubmitting ? (
                 <Spinner animation="border" role={"status"} size="sm" />
@@ -231,6 +304,108 @@ function DeptQueryForm() {
             </Button>
           </Form>
         </Card.Body>
+        <Tabs defaultActiveKey="incoming" className="mb-3">
+          <Tab eventKey="incoming" title="Incoming">
+            <Table striped bordered hover>
+              <thead className="text-center">
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Sender</th>
+
+                  <th>Transaction Type</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData?.incoming?.map((transaction, index) => {
+                  const timestamp = new Date(transaction.timestamp);
+                  return (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div style={{ fontWeight: "bold" }}>
+                          {transaction.from.name}
+                        </div>
+                        <div
+                          className="mt-1"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {transaction.from.district ? (
+                            <div>{transaction.from.district}</div>
+                          ) : null}
+                          {transaction.from.state ? (
+                            <div className="ms-auto">
+                              {transaction.from.state}
+                            </div>
+                          ) : null}
+                        </div>
+                      </td>
+
+                      <td>{transaction.type}</td>
+                      <td>{transaction.amount}</td>
+                      <td>{timestamp.toUTCString()}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Tab>
+          <Tab eventKey="outgoing" title="Outgoing">
+            <Table striped bordered hover>
+              <thead className="text-center">
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Receiver</th>
+
+                  <th>Transaction Type</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData?.outgoing?.map((transaction, index) => {
+                  const timestamp = new Date(transaction.timestamp);
+                  return (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div style={{ fontWeight: "bold" }}>
+                          {transaction.to.name}
+                        </div>
+                        <div
+                          className="mt-1"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {transaction.to.district ? (
+                            <div>{transaction.to.district}</div>
+                          ) : null}
+                          {transaction.to.state ? (
+                            <div className="ms-auto">
+                              {transaction.to.state}
+                            </div>
+                          ) : null}
+                        </div>
+                      </td>
+
+                      <td>{transaction.type}</td>
+                      <td>{transaction.amount}</td>
+                      <td>{timestamp.toUTCString()}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Tab>
+        </Tabs>
       </Card>
       <Modal
         show={modalShow}
