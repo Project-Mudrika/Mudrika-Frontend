@@ -1,31 +1,22 @@
 import { Navbar, Nav, NavDropdown, Container, Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import UserDetails from "../../helpers/UserDetails";
+import { useStoreState } from "easy-peasy";
 import { Icon } from "@iconify/react";
 
 import styles from "../../styles/NavBar.module.scss";
 import Router from "next/router";
-import { useWeb3 } from "@3rdweb/hooks";
 
-export default function NavBar({ loginPage }) {
+export default function NavBar(props) {
+  // User details stored
+  const userDetails = useStoreState((state) => state.userData);
+
   const loaderProfile = {
-    data: [
-      {
-        accid: "Loading...",
-        level: "Loading...",
-        fname: "Loading...",
-        lname: "Loading...",
-        state: "Loading...",
-        district: "Loading...",
-        username: "Loading...",
-      },
-    ],
-    count: null,
+    walletId: "Loading...",
+    name: "Loading...",
   };
 
   const [profile, setProfile] = useState(loaderProfile);
-  const { address, disconnectWallet } = useWeb3();
-  const userDetails = new UserDetails();
 
   const web3logout = async () => {
     console.log("Sign out");
@@ -33,30 +24,29 @@ export default function NavBar({ loginPage }) {
   };
 
   useEffect(() => {
-    if (!(/^\/$|^\/register(\/.*)?$/.test(Router.pathname) || loginPage)) {
-      if (!address) {
+    if (!/^\/$|^\/register(\/.*)?$/.test(Router.pathname)) {
+      if (!userDetails.type) {
         Router.push("/");
       } else {
-        userDetails.fetchUserData(address).then((response) => {
-          const fetchedUserData = response.data;
-          console.log(fetchedUserData);
-          if (fetchedUserData.data.length > 0) {
-            setProfile(fetchedUserData);
-          } else {
-            // alert("Unregistered user. Please register first.");
-            setProfile(loaderProfile);
-            Router.push("/");
-          }
+        setProfile({
+          walletId: userDetails.walletId,
+          name:
+            userDetails.type == "authority"
+              ? userDetails.data[0].fname + " " + userDetails.data[0].lname
+              : userDetails.data[0].name,
         });
       }
     }
-  }, [address]);
+  }, []);
 
   return (
     <div className="NavBar">
       <Navbar className={styles.Navbar} fixed="top" expand="md">
         <Container>
-          <Navbar.Brand className={styles.Navbar_brand} href="/">
+          <Navbar.Brand
+            className={styles.Navbar_brand}
+            href={userDetails.type ? "/dashboard" : "/"}
+          >
             Mudrika
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -109,16 +99,14 @@ export default function NavBar({ loginPage }) {
                   }}
                 >
                   <NavDropdown.Item aria-readonly>
-                    <h5 className="h5">
-                      {profile.data[0].fname + " " + profile.data[0].lname}
-                    </h5>
+                    <h5 className="h5">{profile.name}</h5>
                     <p
                       className="text-muted"
                       style={{
                         fontSize: "0.8rem",
                       }}
                     >
-                      Wallet ID: {profile.data[0].accid} <br />
+                      Wallet ID: {profile.walletId} <br />
                     </p>
                   </NavDropdown.Item>
                   <NavDropdown.Item

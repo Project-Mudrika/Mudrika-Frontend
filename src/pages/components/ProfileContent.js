@@ -33,7 +33,7 @@ function ProfileContent() {
     fetch(
       `${process.env.API_URL}/api/fetch-user-data/?` +
         new URLSearchParams({
-          walletid: address,
+          walletId: address,
         })
     )
       .then((res) => res.json())

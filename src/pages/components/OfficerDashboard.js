@@ -11,30 +11,17 @@ import Authority from "../../helpers/Authority";
 import { useState } from "react";
 import FundRequestTable from "./FundRequestTable";
 import UserDetails from "../../helpers/UserDetails";
+import { useStoreState } from "easy-peasy";
 
-export default function Dashboard() {
-  const { address } = useWeb3();
+export default function OfficerDashboard() {
   const authority = new Authority();
   const [req_table_data, setRequests] = useState([]);
   const [nullRequests, setNullRequests] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const loaderUserData = {
-    data: [
-      {
-        accid: "Loading...",
-        level: "Loading...",
-        fname: "Loading...",
-        lname: "Loading...",
-        state: "Loading...",
-        district: "Loading...",
-        username: "Loading...",
-      },
-    ],
-    count: null,
-  };
-  const [userData, setUserData] = useState(loaderUserData);
+  const userDetails = useStoreState((state) => state.userData);
+
   const [balance, setBalance] = useState(0);
   const [myBalance, setMyBalance] = useState(0);
 
@@ -59,35 +46,14 @@ export default function Dashboard() {
   // authority.watchTransferEvent(address);
 
   useEffect(() => {
-    if (!address) {
-      Router.push("/");
-    }
+    // if (!address) {
+    //   Router.push("/");
+    // }
+
+    console.log("Dashboard data: ", userDetails.data);
 
     authority.fetchMyBalance().then((myBalance) => setMyBalance(myBalance));
     authority.fetchBalance().then((balance) => setBalance(balance));
-
-    // fetch(
-    //   `${process.env.API_URL}/api/fetch-user-data/?` +
-    //     new URLSearchParams({
-    //       walletid: address,
-    //     })
-    // )
-    //   .then((res) => res.json())
-    //   .then((data) => setUserData(data))
-    //   .then(() => {
-    //     console.log(userData.data[0].level);
-    //   });
-    const userDetails = new UserDetails();
-    userDetails.fetchUserData(address).then((response) => {
-      const fetchedUserData = response.data;
-      console.log(fetchedUserData);
-      if (fetchedUserData.data[0]) {
-        setUserData(fetchedUserData);
-      } else {
-        alert("Unregistered user. Please register first.");
-        setUserData(loaderProfile);
-      }
-    });
 
     authority.fetchRequests().then((requests) => {
       setRequests(requests);
@@ -99,25 +65,28 @@ export default function Dashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
         <h3 className="h2">
-          Welcome, {userData.data[0].fname + " " + userData.data[0].lname}
+          Welcome,{" "}
+          {userDetails.data[0]?.fname + " " + userDetails.data[0]?.lname}
         </h3>
-        <p className="text-muted">Account ID: {userData.data[0].accid}</p>
-        {userData.data[0].level == "national" || "admin" ? (
+        <p className="text-muted">
+          Account ID: {userDetails.data[0]?.walletid}
+        </p>
+        {userDetails.data[0]?.level == "national" || "admin" ? (
           <p className="text-muted">
             National Disaster Relief Fund Balance:{" "}
             {"₹" + parseInt(balance).toLocaleString("hi-IN")}
           </p>
         ) : (
           <p className="text-muted">
-            {userData.data[0].level.charAt(0).toUpperCase() +
-              userData.data[0].level.slice(1)}{" "}
+            {userData.data[0]?.level.charAt(0).toUpperCase() +
+              userData.data[0]?.level.slice(1)}{" "}
             Authority Balance:{" "}
             {"₹" + parseInt(myBalance).toLocaleString("hi-IN")}
           </p>
         )}
         <h4 className="h4">
           Recent Fund Requests{" "}
-          {userData.data[0].level === "national" ? "To You" : "From You"}
+          {userDetails.data[0]?.level === "national" ? "To You" : "From You"}
         </h4>
         <div className={styles.Dashboard_row}>
           <Card bg="light" className={styles.Dashboard_recent_cases}>
@@ -216,7 +185,7 @@ export default function Dashboard() {
               Router.push("/manageFunds");
             }}
           />
-          {userData.data[0].level === "national" ? (
+          {userDetails.data[0]?.level === "national" ? (
             <QuickAction
               icon="akar-icons:key"
               text="Generate Access Key Tokens"
