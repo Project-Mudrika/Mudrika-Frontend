@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Card, Modal, Button, Form, Spinner, Table, Tabs, Tab } from "react-bootstrap";
+import {
+  Card,
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Table,
+  Tabs,
+  Tab,
+} from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import Router from "next/router";
 import axios from "axios";
+import { useStoreState } from "easy-peasy";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 import states from "../../helpers/stateList";
+import MudrikaGraph from "../../helpers/MudrikaGraph";
 
 function DeptQueryForm() {
   const [access_level, setAccessLevel] = useState("district");
@@ -14,65 +25,66 @@ function DeptQueryForm() {
 
   const [isNational, setIsNational] = useState(false);
   const [isState, setIsState] = useState(false);
-  
-    const [transactions, setTransactions] = useState([]);
 
-  const tableData={
-    "dma_name": "District Disaster Management Authority",
-    "state_name": "Kerala",
-    "district_name": "Ernakulam",
-    "incoming": [
-        {
-            "type": "consignment",
-            "consignment_name": "Food Supplies",
-            "from": {
-                "level": "district",
-                "name": "District Disaster Management Authority",
-                "state": "Kerala",
-                "district": "Thrissur"
-            },
-            "amount": 500.00,
-            "timestamp": 1647590400
+  const [transactions, setTransactions] = useState([]);
+
+  const mudrikaGraph = new MudrikaGraph();
+  const userDetails = useStoreState((state) => state.userData);
+  const tableData = {
+    dma_name: "District Disaster Management Authority",
+    state_name: "Kerala",
+    district_name: "Ernakulam",
+    incoming: [
+      {
+        type: "consignment",
+        consignment_name: "Food Supplies",
+        from: {
+          level: "district",
+          name: "District Disaster Management Authority",
+          state: "Kerala",
+          district: "Thrissur",
         },
-        {
-            "type": "fund",
-            "reason": "COVID-19 relief",
-            "from": {
-                "level": "state",
-                "name": "State Disaster Management Authority",
-                "state": "Kerala"
-            },
-            "amount": 2000.00,
-            "timestamp": 1647945600
-        }
+        amount: 500.0,
+        timestamp: 1647590400,
+      },
+      {
+        type: "fund",
+        reason: "COVID-19 relief",
+        from: {
+          level: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        amount: 2000.0,
+        timestamp: 1647945600,
+      },
     ],
-    "outgoing": [
-        {
-            "type": "consignment",
-            "consignment_name": "Medical Supplies",
-            "to": {
-                "level": "district",
-                "name": "District Disaster Management Authority",
-                "state": "Kerala",
-                "district": "Thrissur"
-            },
-            "amount": 750.00,
-            "timestamp": 1645766400
+    outgoing: [
+      {
+        type: "consignment",
+        consignment_name: "Medical Supplies",
+        to: {
+          level: "district",
+          name: "District Disaster Management Authority",
+          state: "Kerala",
+          district: "Thrissur",
         },
-        {
-            "type": "fund",
-            "reason": "Disaster response",
-            "to": {
-                "level": "state",
-                "name": "State Disaster Management Authority",
-                "state": "Kerala"
-            },
-            "amount": 1000.00,
-            "timestamp": 1646414400
-        }
-    ]
-}
-
+        amount: 750.0,
+        timestamp: 1645766400,
+      },
+      {
+        type: "fund",
+        reason: "Disaster response",
+        to: {
+          level: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        amount: 1000.0,
+        timestamp: 1646414400,
+      },
+    ],
+  };
 
   useEffect(() => {
     setIsNational(access_level === "national");
@@ -111,18 +123,28 @@ function DeptQueryForm() {
     tokenFormData.append("access_level", access_level);
     tokenFormData.append("state", state);
     tokenFormData.append("district", district);
-    tokenFormData.append("date", startDate); // Append selected date to form data
+    tokenFormData.append("startDate", startDate);
+    tokenFormData.append("endDate", endDate);
 
-    const res = await axios
-      .post(`${process.env.API_URL}/api/new-access-token/`, tokenFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+    const queriedWalletId = await axios
+      .get(
+        `${process.env.API_URL}/api/get-authority-walletid/`,
+        tokenFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .catch((err) => console.error(err));
     const data = await res?.data;
-    console.log(data);
-    setResponse(data);
+
+    // let fundToDept = await mudrikaGraph.fetchFundTransfersToDepartment(
+    //   userDetails.walletId
+    // );
+    // console.log("Fund to department from subgraph", fundToDept);
+
+    // setResponse(data);
     setIsSubmitting(false);
     setAccessLevel("");
     setState("");
@@ -152,10 +174,17 @@ function DeptQueryForm() {
         <Card.Body>
           <Form
             onSubmit={submitHandler}
-            className={"d-flex align-items-center justify-content-center flex-wrap"}
+            className={
+              "d-flex align-items-center justify-content-center flex-wrap"
+            }
           >
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Dept. Level</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                Dept. Level
+              </Form.Label>
               <select
                 name="access_level"
                 label="Access Level"
@@ -169,8 +198,13 @@ function DeptQueryForm() {
                 <option value="national">National</option>
               </select>
             </Form.Group>
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }} >
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>State</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                State
+              </Form.Label>
               <select
                 name="state"
                 label="State"
@@ -195,8 +229,13 @@ function DeptQueryForm() {
                 Please select a state.
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>District</Form.Label>
+            <Form.Group
+              className="d-flex align-items-center"
+              style={{ marginRight: 16 }}
+            >
+              <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                District
+              </Form.Label>
               <select
                 name="district"
                 label="District"
@@ -218,9 +257,22 @@ function DeptQueryForm() {
                   })}
               </select>
             </Form.Group>
-            <div style={{ flexBasis: "100%", display: "flex", justifyContent: "center", alignItems: "center",marginTop:"15px" }}>
-              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select Start Date:</Form.Label>
+            <div
+              style={{
+                flexBasis: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "15px",
+              }}
+            >
+              <Form.Group
+                className="d-flex align-items-center"
+                style={{ marginRight: 16 }}
+              >
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                  Select Start Date:
+                </Form.Label>
                 <br />
                 <Form.Control
                   type="date"
@@ -228,8 +280,13 @@ function DeptQueryForm() {
                   value={startDate}
                 />
               </Form.Group>
-              <Form.Group className="d-flex align-items-center" style={{ marginRight: 16 }}>
-                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>Select End Date:</Form.Label>
+              <Form.Group
+                className="d-flex align-items-center"
+                style={{ marginRight: 16 }}
+              >
+                <Form.Label style={{ marginRight: 4, whiteSpace: "nowrap" }}>
+                  Select End Date:
+                </Form.Label>
                 <Form.Control
                   type="date"
                   onChange={(e) => setEndDate(e.target.value)}
@@ -243,7 +300,16 @@ function DeptQueryForm() {
               Please select a district.
             </Form.Control.Feedback>
 
-            <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginTop: "20px", flexBasis: "10%", width: "fit-content" }}>
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                marginTop: "20px",
+                flexBasis: "10%",
+                width: "fit-content",
+              }}
+            >
               {isSubmitting ? (
                 <Spinner animation="border" role={"status"} size="sm" />
               ) : (
@@ -251,99 +317,109 @@ function DeptQueryForm() {
               )}
             </Button>
           </Form>
-
         </Card.Body>
-        <Tabs
-      defaultActiveKey="incoming"
-      className="mb-3"
-    >
-      <Tab eventKey="incoming" title="Incoming">
-      <Table striped bordered hover>
-          <thead className="text-center">
+        <Tabs defaultActiveKey="incoming" className="mb-3">
+          <Tab eventKey="incoming" title="Incoming">
+            <Table striped bordered hover>
+              <thead className="text-center">
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Sender</th>
 
-            <tr>
-              <th>Sl.No</th>
-              <th>Sender</th>
-              
-              <th>Transaction Type</th>
-              <th>Amount</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              tableData?.incoming?.map((transaction, index) => {
-                const timestamp = new Date(transaction.timestamp)
-                return (
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div style={{ fontWeight: "bold" }}>{transaction.from.name}</div>
-                      <div className="mt-1" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                        {transaction.from.district ?
-                          <div>{transaction.from.district}</div> : null
-                        }
-                        {transaction.from.state ?
-                          <div className="ms-auto">{transaction.from.state}</div> : null
-                        }
-                      </div>
-                    </td>
-                    
-                    <td>{transaction.type}</td>
-                    <td>{transaction.amount}</td>
-                    <td>{timestamp.toUTCString()}</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </Table>
-      </Tab>
-      <Tab eventKey="outgoing" title="Outgoing">
-      <Table striped bordered hover>
-          <thead className="text-center">
+                  <th>Transaction Type</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData?.incoming?.map((transaction, index) => {
+                  const timestamp = new Date(transaction.timestamp);
+                  return (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div style={{ fontWeight: "bold" }}>
+                          {transaction.from.name}
+                        </div>
+                        <div
+                          className="mt-1"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {transaction.from.district ? (
+                            <div>{transaction.from.district}</div>
+                          ) : null}
+                          {transaction.from.state ? (
+                            <div className="ms-auto">
+                              {transaction.from.state}
+                            </div>
+                          ) : null}
+                        </div>
+                      </td>
 
-            <tr>
-              <th>Sl.No</th>
-              <th>Receiver</th>
-              
-              <th>Transaction Type</th>
-              <th>Amount</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              tableData?.outgoing?.map((transaction, index) => {
-                const timestamp = new Date(transaction.timestamp)
-                return (
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div style={{ fontWeight: "bold" }}>{transaction.to.name}</div>
-                      <div className="mt-1" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                        {transaction.to.district ?
-                          <div>{transaction.to.district}</div> : null
-                        }
-                        {transaction.to.state ?
-                          <div className="ms-auto">{transaction.to.state}</div> : null
-                        }
-                      </div>
-                    </td>
-                    
-                    <td>{transaction.type}</td>
-                    <td>{transaction.amount}</td>
-                    <td>{timestamp.toUTCString()}</td>
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </Table>
-      </Tab>
-      
-    </Tabs>
-        
+                      <td>{transaction.type}</td>
+                      <td>{transaction.amount}</td>
+                      <td>{timestamp.toUTCString()}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Tab>
+          <Tab eventKey="outgoing" title="Outgoing">
+            <Table striped bordered hover>
+              <thead className="text-center">
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Receiver</th>
+
+                  <th>Transaction Type</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData?.outgoing?.map((transaction, index) => {
+                  const timestamp = new Date(transaction.timestamp);
+                  return (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div style={{ fontWeight: "bold" }}>
+                          {transaction.to.name}
+                        </div>
+                        <div
+                          className="mt-1"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {transaction.to.district ? (
+                            <div>{transaction.to.district}</div>
+                          ) : null}
+                          {transaction.to.state ? (
+                            <div className="ms-auto">
+                              {transaction.to.state}
+                            </div>
+                          ) : null}
+                        </div>
+                      </td>
+
+                      <td>{transaction.type}</td>
+                      <td>{transaction.amount}</td>
+                      <td>{timestamp.toUTCString()}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Tab>
+        </Tabs>
       </Card>
       <Modal
         show={modalShow}
@@ -399,7 +475,6 @@ function DeptQueryForm() {
                 >
                   <Icon width="1rem" icon="charm:copy" color="#999999" />
                 </Button>
-                
               </blockquote>
             </p>
           ) : (

@@ -1,61 +1,98 @@
 import { useWeb3 } from "@3rdweb/hooks";
 import { Modal, Button, Card, Form, Spinner, Table } from "react-bootstrap";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 import { pinFileToIPFS } from "../../helpers/uploadIpfs";
 import Router from "next/router";
+import MudrikaGraph from "../../helpers/MudrikaGraph";
 
 function SearchByCaseIdForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [caseId, setCaseId] = useState("");
+
+  const [transactionsList, setTransactionsList] = useState([]);
+  useEffect(() => {}, [transactionsList]);
+
+  const mudrikaGraph = new MudrikaGraph();
   const tableData = {
-    "case_id": "123456",
-    "transactions": [
+    case_id: "123456",
+    transactions: [
       {
-        "type": "consignment",
-        "from": {
-          "type": "national",
-          "name": "National Disaster Management Authority"
+        type: "consignment",
+        from: {
+          type: "national",
+          name: "National Disaster Management Authority",
         },
-        "to": {
-          "type": "state",
-          "name": "State Disaster Management Authority",
-          "state": "Kerala"
+        to: {
+          type: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
         },
-        "amount": 500.00,
-        "timestamp": 1647590400,
-        "consignment_name": "Food Supplies"
+        amount: 500.0,
+        timestamp: 1647590400,
+        consignment_name: "Food Supplies",
       },
       {
-        "type": "funds",
-        "from": {
-          "type": "state",
-          "name": "State Disaster Management Authority",
-          "state": "Kerala"
+        type: "funds",
+        from: {
+          type: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
         },
-        "to": {
-          "type": "district",
-          "name": "District Disaster Management Authority",
-          "state": "Kerala",
-          "district": "Ernakulam"
+        to: {
+          type: "district",
+          name: "District Disaster Management Authority",
+          state: "Kerala",
+          district: "Ernakulam",
         },
-        "amount": 1000.00,
-        "timestamp": 1646414400,
-        "reason": "Disaster response"
-      }
-    ]
-  }
+        amount: 1000.0,
+        timestamp: 1646414400,
+        reason: "Disaster response",
+      },
+    ],
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    const fundTransfers = await mudrikaGraph.fetchByCaseID();
+    console.log(fundTransfers);
+
+    let formattedTransactions = [];
+
+    fundTransfers.map((transfer) => {
+      formattedTransactions.push({
+        type: "funds",
+        from: {
+          type: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        to: {
+          walletid: transfer.to,
+          // type: "district",
+          // name: "District Disaster Management Authority",
+          // state: "Kerala",
+          // district: "Ernakulam",
+        },
+        amount: transfer.amount,
+        timestamp: transfer.timestamp,
+        reason: "Disaster response",
+      });
+    });
+
+    setTransactionsList(formattedTransactions);
+
+    console.log("transactions list after adding", transactionsList);
+
+    setIsSubmitting(false);
     setCaseId("");
   };
   return (
-
     // <div className={dashStyles.Dashboard}>
     <div>
       <Card
@@ -88,10 +125,8 @@ function SearchByCaseIdForm() {
           </Form>
         </Card.Body>
 
-
         <Table striped bordered hover>
           <thead className="text-center">
-
             <tr>
               <th>Sl.No</th>
               <th>Sender</th>
@@ -102,45 +137,60 @@ function SearchByCaseIdForm() {
             </tr>
           </thead>
           <tbody>
-            {
-              tableData?.transactions?.map((transaction, index) => {
-                const timestamp = new Date(transaction.timestamp)
-                return (
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>
-                      <div style={{ fontWeight: "bold" }}>{transaction.from.name}</div>
-                      <div className="mt-1" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                        {transaction.from.district ?
-                          <div>{transaction.from.district}</div> : null
-                        }
-                        {transaction.from.state ?
-                          <div className="ms-auto">{transaction.from.state}</div> : null
-                        }
-                      </div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: "bold" }}>{transaction.to.name}</div>
-                      <div className="mt-1" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                        {transaction.to.district ?
-                          <div>{transaction.to.district}</div> : null
-                        }
-                        {transaction.to.state ?
-                          <div className="ms-auto">{transaction.to.state}</div> : null
-                        }
-                      </div>
-                    </td>
-                    <td>{transaction.type}</td>
-                    <td>{transaction.amount}</td>
-                    <td>{timestamp.toUTCString()}</td>
-                  </tr>
-                )
-              })
-            }
+            {tableData?.transactions?.map((transaction, index) => {
+              const timestamp = new Date(transaction.timestamp);
+              return (
+                <tr key={index + 1}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <div style={{ fontWeight: "bold" }}>
+                      {transaction.from.name}
+                    </div>
+                    <div
+                      className="mt-1"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {transaction.from.district ? (
+                        <div>{transaction.from.district}</div>
+                      ) : null}
+                      {transaction.from.state ? (
+                        <div className="ms-auto">{transaction.from.state}</div>
+                      ) : null}
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{ fontWeight: "bold" }}>
+                      {transaction.to.name}
+                    </div>
+                    <div
+                      className="mt-1"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {transaction.to.district ? (
+                        <div>{transaction.to.district}</div>
+                      ) : null}
+                      {transaction.to.state ? (
+                        <div className="ms-auto">{transaction.to.state}</div>
+                      ) : null}
+                    </div>
+                  </td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.amount}</td>
+                  <td>{timestamp.toUTCString()}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       </Card>
-
     </div>
   );
 }
