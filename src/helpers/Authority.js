@@ -26,8 +26,7 @@ class Authority {
 
     constructor() {
         this.contractAbi = Mudrika.abi;
-        // this.contractAddress = process.env.NEXT_PUBLIC_Contract_ID;
-        this.contractAddress = "0x39810FC9ED89Dd870006d74683052A52Bc98CF7D";
+        this.contractAddress = process.env.NEXT_PUBLIC_Contract_ID;
 
     }
 
