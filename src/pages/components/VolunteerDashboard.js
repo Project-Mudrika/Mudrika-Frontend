@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import { useStoreState } from "easy-peasy";
+import axios from "axios";
 
 import Image from "next/image";
 import styles from "../../styles/Dashboard.module.scss";
@@ -45,9 +46,9 @@ function VolunteerDashboard() {
 
     // Construct the activity FormData object
     const formData = new FormData();
+    formData.append("walletid", userDetails.walletId);
     formData.append("description", description);
-    formData.append("tokenCount", 0);
-    formData.append("date", Date.now());
+    formData.append("date", new Date().toISOString());
     formData.append("imageLink", fileUrl);
 
     // Do something with the activity data and image file, such as send it to a server
@@ -55,6 +56,19 @@ function VolunteerDashboard() {
     for (let pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
     }
+    const res = await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/volunteer/new-activity/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .catch((err) => console.error(err));
+    const data = await res?.data;
+    console.log(data);
 
     // Reset the form
     event.target.reset();
@@ -76,9 +90,7 @@ function VolunteerDashboard() {
           <Card.Body>
             <div className={volunteerStyles.VolunteerHeader}>
               <img
-                src={
-                  "https://gateway.pinata.cloud/ipfs/QmSvDyDDK6o1nq5sHRuZJuFaYCxXDGqJ5DbtZGdbDGAZEb"
-                }
+                src={userData.profileimg}
                 className={volunteerStyles.VolunteerImage}
               />
               <div className={volunteerStyles.VolunteerDetails}>
@@ -223,7 +235,10 @@ function VolunteerDashboard() {
                 <Toast
                   bg="success"
                   className="text-white"
-                  onClose={() => setIsSuccess(false)}
+                  onClose={() => {
+                    setIsSuccess(false);
+                    handleClose();
+                  }}
                   show={isSuccess}
                   delay={3000}
                   autohide
