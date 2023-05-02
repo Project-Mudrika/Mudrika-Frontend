@@ -12,21 +12,20 @@
 
 */
 
-import { createClient } from 'urql'
+import { createClient } from "urql";
 
 class MudrikaGraph {
+  API_URL = "https://api.studio.thegraph.com/query/43448/mudrika_test/v0.0.1";
 
-    API_URL = "https://api.studio.thegraph.com/query/43448/mudrika_test/v0.0.1"
+  constructor() {
+    this.client = createClient({
+      url: this.API_URL,
+    });
+  }
 
-    constructor() {
-        this.client = createClient({
-            url: this.API_URL,
-        })
-    }
-
-    // for now only "to" works as contract doesn't have a from field, will modify later
-    async fetchFundTransfersToDepartment(address) {
-        let query = `
+  // for now only "to" works as contract doesn't have a from field, will modify later
+  async fetchFundTransfersToDepartment(address) {
+    let query = `
                 {
                     fundTransferreds(
                     first: 5
@@ -38,19 +37,42 @@ class MudrikaGraph {
                     to
                     }
                 }
-        `
+        `;
 
-        let data = await this.client.query(query).toPromise()
+    let data = await this.client.query(query).toPromise();
 
-        const data_list = data.data.fundTransferreds.map(item => ({
-            id: item.id,
-            amount: item.amount,
-            requestId: item.requestId,
-            to: item.to
-        }));
+    const data_list = data.data.fundTransferreds.map((item) => ({
+      id: item.id,
+      amount: item.amount,
+      requestId: item.requestId,
+      to: item.to,
+    }));
 
-        return data_list
-    }
+    return data_list;
+  }
+
+  // For search by caseID
+  async fetchByCaseID(caseID = 1) {
+    console.log("reached");
+    let query = `
+        {
+            fundTransferreds(where: {requestId: "${caseID}"}) {
+              amount
+              to
+              blockTimestamp
+            }
+          }
+        `;
+    let data = await this.client.query(query).toPromise();
+
+    const data_list = data.data.fundTransferreds.map((item) => ({
+      amount: item.amount,
+      to: item.to,
+      timestamp: item.blockTimestamp,
+    }));
+
+    return data_list;
+  }
 }
 
 export default MudrikaGraph;

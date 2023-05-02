@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
 
 import Image from "next/image";
 import styles from "../../styles/Dashboard.module.scss";
 import volunteerStyles from "../../styles/Volunteer.module.scss";
+import { useStoreState } from "easy-peasy";
 
 function VolunteerDashboard() {
+  const userDetails = useStoreState((state) => state.userData);
+  const userData = userDetails.data[0];
+
+  const [profileImg, setProfileImg] = useState("");
+
+  useEffect(() => {
+    setProfileImg(userData.profileimg);
+  }, [userData]);
+
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_content}>
@@ -13,7 +23,9 @@ function VolunteerDashboard() {
           <Card.Body>
             <div className={volunteerStyles.VolunteerHeader}>
               <img
-                src="https://gateway.pinata.cloud/ipfs/QmVBeCGpoRsvQNd8WFtbCwH72DBk3dbRYmyWS8ZfsLFomG"
+                src={
+                  "https://gateway.pinata.cloud/ipfs/QmSvDyDDK6o1nq5sHRuZJuFaYCxXDGqJ5DbtZGdbDGAZEb"
+                }
                 className={volunteerStyles.VolunteerImage}
               />
               <div className={volunteerStyles.VolunteerDetails}>
@@ -24,7 +36,7 @@ function VolunteerDashboard() {
                     padding: 0,
                   }}
                 >
-                  Generic Volunteer Organization
+                  {userData.name}
                 </h2>
                 <h5
                   className="h5 text-muted"
@@ -32,7 +44,7 @@ function VolunteerDashboard() {
                     margin: 0,
                   }}
                 >
-                  Organization
+                  {userData.voltype}
                 </h5>
                 <h6
                   className="text-muted"
@@ -40,7 +52,10 @@ function VolunteerDashboard() {
                     paddingTop: 8,
                   }}
                 >
-                  Registered NGO / VO ID: DL/1234/0000567
+                  {userData.voltype == "organisation"
+                    ? "Registered NGO / VO ID"
+                    : "Volunteer Aadhar ID"}
+                  : {userData.aadharngoid}
                 </h6>
               </div>
               <div className={volunteerStyles.VolunteerContact}>

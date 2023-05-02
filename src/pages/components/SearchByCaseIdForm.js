@@ -1,15 +1,21 @@
 import { useWeb3 } from "@3rdweb/hooks";
 import { Modal, Button, Card, Form, Spinner, Table } from "react-bootstrap";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import dashStyles from "../../styles/Dashboard.module.scss";
 import Router from "next/router";
+import MudrikaGraph from "../../helpers/MudrikaGraph";
 
 function SearchByCaseIdForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [caseId, setCaseId] = useState("");
+
+  const [transactionsList, setTransactionsList] = useState([]);
+  useEffect(() => {}, [transactionsList]);
+
+  const mudrikaGraph = new MudrikaGraph();
   const tableData = {
     case_id: "123456",
     transactions: [
@@ -51,6 +57,38 @@ function SearchByCaseIdForm() {
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    const fundTransfers = await mudrikaGraph.fetchByCaseID();
+    console.log(fundTransfers);
+
+    let formattedTransactions = [];
+
+    fundTransfers.map((transfer) => {
+      formattedTransactions.push({
+        type: "funds",
+        from: {
+          type: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        to: {
+          walletid: transfer.to,
+          // type: "district",
+          // name: "District Disaster Management Authority",
+          // state: "Kerala",
+          // district: "Ernakulam",
+        },
+        amount: transfer.amount,
+        timestamp: transfer.timestamp,
+        reason: "Disaster response",
+      });
+    });
+
+    setTransactionsList(formattedTransactions);
+
+    console.log("transactions list after adding", transactionsList);
+
+    setIsSubmitting(false);
     setCaseId("");
   };
   return (
@@ -101,7 +139,7 @@ function SearchByCaseIdForm() {
             {tableData?.transactions?.map((transaction, index) => {
               const timestamp = new Date(transaction.timestamp);
               return (
-                <tr>
+                <tr key={index + 1}>
                   <td>{index + 1}</td>
                   <td>
                     <div style={{ fontWeight: "bold" }}>
