@@ -31,10 +31,10 @@ function ProfileContent() {
     }
 
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/?` +
-        new URLSearchParams({
-          walletId: address,
-        })
+      `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/` +
+      new URLSearchParams({
+        walletId: address,
+      })
     )
       .then((res) => res.json())
       .then((data) => setProfile(data));
