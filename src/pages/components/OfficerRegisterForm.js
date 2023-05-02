@@ -46,11 +46,15 @@ function OfficerRegisterForm() {
     registerFormData.append("access_level_token", accessLevelToken);
 
     const res = await axios
-      .post(`${process.env.API_URL}/api/register/officer/`, registerFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/register/officer/`,
+        registerFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .catch((err) => console.error(err));
     const data = await res?.data;
     console.log(data);

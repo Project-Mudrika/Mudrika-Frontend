@@ -31,7 +31,7 @@ function ProfileContent() {
     }
 
     fetch(
-      `${process.env.API_URL}/api/fetch-user-data/?` +
+      `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/?` +
         new URLSearchParams({
           walletId: address,
         })

@@ -108,7 +108,11 @@ function VolunteerDashboard() {
             </div>
 
             <h4 className={volunteerStyles.SectionHeading}>Activities</h4>
-            <Button variant="primary" style={{ float: "right" }}>
+            <Button
+              variant="primary"
+              style={{ float: "right" }}
+              onClick={() => {}}
+            >
               Add Activity
             </Button>
           </Card.Body>

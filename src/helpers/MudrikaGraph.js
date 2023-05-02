@@ -15,11 +15,12 @@
 import { createClient } from "urql";
 
 class MudrikaGraph {
-  API_URL = "https://api.studio.thegraph.com/query/43448/mudrika_test/v0.0.1";
+  NEXT_PUBLIC_API_URL =
+    "https://api.studio.thegraph.com/query/43448/mudrika_test/v0.0.1";
 
   constructor() {
     this.client = createClient({
-      url: this.API_URL,
+      url: this.NEXT_PUBLIC_API_URL,
     });
   }
 

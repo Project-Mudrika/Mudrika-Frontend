@@ -43,7 +43,7 @@ function VolunteerRegisterForm() {
 
     const res = await axios
       .post(
-        `${process.env.API_URL}/api/register/volunteer/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/register/volunteer/`,
         registerFormData,
         {
           headers: {

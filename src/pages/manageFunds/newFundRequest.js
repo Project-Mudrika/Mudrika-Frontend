@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Authority from "../../helpers/Authority";
 
-import { pinFileToIPFS } from '../../helpers/uploadIpfs';
+import { pinFileToIPFS } from "../../helpers/uploadIpfs";
 
 import axios from "axios";
 
@@ -24,24 +24,22 @@ function NewFundRequest() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [file, setFile] = useState(null)
-  const [fileUrl, setFileUrl] = useState(null)
+  const [file, setFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
 
   useEffect(() => {
     //fetch account address and populate the your address field
     window.ethereum.enable().then((myAccount) => setAccount(myAccount[0]));
 
     axios
-      .get(`${process.env.API_URL}/api/fetch-national-officers/`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/fetch-national-officers/`)
       .then((response) => setNationalOfficers(response.data.data))
       .catch((err) => console.log(err));
   }, []);
 
-
-
   function onChange(e) {
-    const file = e.target.files[0]
-    setFile(file)
+    const file = e.target.files[0];
+    setFile(file);
   }
 
   async function onUpload(e) {
@@ -51,29 +49,23 @@ function NewFundRequest() {
       const url = await pinFileToIPFS(file);
 
       // const url = `https://ipfs.infura.io/ipfs/${added.path}`
-      console.log(url, " fileURL")
-      setFileUrl(url)
-      console.log(url, " URL")
-      alert(`fileURL: ${url}`)
-
+      console.log(url, " fileURL");
+      setFileUrl(url);
+      console.log(url, " URL");
+      alert(`fileURL: ${url}`);
     } catch (error) {
-      <inputs
-        type="file"
-        name="Asset"
-        className="my-4"
-        onChange={onChange}
-      />
-      console.log('Error uploading file: ', error)
+      <inputs type="file" name="Asset" className="my-4" onChange={onChange} />;
+      console.log("Error uploading file: ", error);
     }
   }
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!toAddr) {
-      toAddr = "0x598518be171D592b24041e92324988035C9429F5"
+      toAddr = "0x598518be171D592b24041e92324988035C9429F5";
     }
     await onUpload();
-    description = description.concat(`\nSupporting Documents Link: ${fileUrl}`)
+    description = description.concat(`\nSupporting Documents Link: ${fileUrl}`);
     const res = await authority.requestFunds(amount, toAddr, description);
     console.log(amount, toAddr, description);
     alert(res);
@@ -130,10 +122,7 @@ function NewFundRequest() {
             </Form.Group>
             <Form.Group className="mb-3 file">
               <Form.Label>Supporting Evidence/Case Files</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={onChange}
-              />
+              <Form.Control type="file" onChange={onChange} />
             </Form.Group>
             <Form.Group className="mb-3 amount">
               <Form.Label>Request Description</Form.Label>

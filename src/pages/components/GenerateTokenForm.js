@@ -51,11 +51,15 @@ function GenerateTokenForm() {
     tokenFormData.append("district", district);
 
     const res = await axios
-      .post(`${process.env.API_URL}/api/new-access-token/`, tokenFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/new-access-token/`,
+        tokenFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .catch((err) => console.error(err));
     const data = await res?.data;
     console.log(data);

@@ -17,7 +17,7 @@ class UserDetails {
     if (walletId) {
       try {
         let response = await axios.get(
-          `${process.env.API_URL}/api/fetch-user-data/`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/`,
           {
             responseType: "json",
             params: {
