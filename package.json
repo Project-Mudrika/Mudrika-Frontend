@@ -27,7 +27,7 @@
     "react-redux": "^8.0.5",
     "sass": "^1.52.3",
     "urql": "^3.0.4",
-    "web3": "^1.7.4"
+    "web3": "^1.9.0"
   },
   "devDependencies": {
     "eslint": "8.17.0",
