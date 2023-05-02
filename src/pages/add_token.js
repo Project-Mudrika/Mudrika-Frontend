@@ -1,8 +1,11 @@
+import { useState } from "react";
 import TokenHelper from "../helpers/TokenHelper";
 
 export default function addToken() {
 
     const tokenHelper = new TokenHelper();
+    const [amount, setAmount] = useState(0);
+    const [toAddress, setToAddress] = useState("");
 
     async function addMudrikaToken(e) {
         e.preventDefault();
@@ -42,16 +45,37 @@ export default function addToken() {
         alert(`Token Balance: ${mdk_balance} MDK`)
     }
 
+    async function mintTokens(e) {
+        e.preventDefault();
+        await tokenHelper.mintTokens(toAddress, amount)
+    }
+
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem' }}>
+
+            {/* element 1 */}
             <button type="button" onClick={addMudrikaToken}>
                 Add Mudrika Token
             </button>
-            <div style={{ height: 100, width: 100 }} />
+
+            {/* element 2 */}
             <button type="button" onClick={fetchTokenBalance}>
                 Fetch Mudrika Token Balance
             </button>
+
+            {/* element 3 */}
+            <div style={{ display: 'flex', gap: '1rem' }}>
+                <label>Amount</label>
+                <input type="number" onChange={(e) => setAmount(e.target.value)} />
+                <label>To Address</label>
+                <input type="text" onChange={(e) => setToAddress(e.target.value)} />
+                <button type="button" onClick={mintTokens}>
+                    Mint Tokens to Address
+                </button>
+            </div>
+
         </div>
+
 
     );
 }

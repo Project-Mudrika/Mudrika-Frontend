@@ -35,6 +35,12 @@ class TokenHelper {
         return balance / (10 ** 18);
     }
 
+    async mintTokens(toAddress, amount) {
+        await this.fetchAccount();
+        var amount_string = (amount * (10 ** 18)).toString();
+        await this.MudrikaToken.methods.mint(toAddress, amount_string).send();
+    }
+
 }
 
 export default TokenHelper;
