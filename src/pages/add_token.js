@@ -1,4 +1,8 @@
+import TokenHelper from "../helpers/TokenHelper";
+
 export default function addToken() {
+
+    const tokenHelper = new TokenHelper();
 
     async function addMudrikaToken(e) {
         e.preventDefault();
@@ -32,10 +36,20 @@ export default function addToken() {
         }
     }
 
+    async function fetchTokenBalance(e) {
+        e.preventDefault();
+        var mdk_balance = await tokenHelper.fetchBalance()
+        alert(`Token Balance: ${mdk_balance} MDK`)
+    }
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
             <button type="button" onClick={addMudrikaToken}>
                 Add Mudrika Token
+            </button>
+            <div style={{ height: 100, width: 100 }} />
+            <button type="button" onClick={fetchTokenBalance}>
+                Fetch Mudrika Token Balance
             </button>
         </div>
 
