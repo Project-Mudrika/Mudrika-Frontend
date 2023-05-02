@@ -4,7 +4,12 @@ export const store = createStore({
   userData: {
     walletId: null,
     type: null,
-    data: {},
+    data: [
+      {
+        name: null,
+        voltype: null,
+      },
+    ],
   },
   updateData: action((state, { walletId, type, data }) => {
     state.userData.walletId = walletId;
