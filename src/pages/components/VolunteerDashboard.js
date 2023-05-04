@@ -7,6 +7,7 @@ import {
   Toast,
   Spinner,
   ToastContainer,
+  Col,
 } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import { useStoreState } from "easy-peasy";
@@ -16,10 +17,19 @@ import Image from "next/image";
 import styles from "../../styles/Dashboard.module.scss";
 import volunteerStyles from "../../styles/Volunteer.module.scss";
 import { pinFileToIPFS } from "../../helpers/uploadIpfs";
+import TokenHelper from "../../helpers/TokenHelper";
 
 function VolunteerDashboard() {
   const userDetails = useStoreState((state) => state.userData);
   const userData = userDetails.data[0];
+
+  // Token Handler
+  const tokenHelper = new TokenHelper();
+  const [tokenBalance, setTokenBalance] = useState(0);
+  useEffect(async () => {
+    const balance = await tokenHelper.fetchBalance();
+    setTokenBalance(balance);
+  }, []);
 
   // Receive image from form
   const [activityUploadImage, setActivityUploadImage] = useState(null);
@@ -35,7 +45,7 @@ function VolunteerDashboard() {
   // Server submission data
   const [description, setDescription] = useState("");
 
-  const handleFormSubmit = async (event) => {
+  const handleNewActivityFormSubmit = async (event) => {
     event.preventDefault();
 
     setIsSubmitting(true);
@@ -68,7 +78,6 @@ function VolunteerDashboard() {
       )
       .catch((err) => console.error(err));
     const data = await res?.data;
-    console.log(data);
 
     // Reset the form
     event.target.reset();
@@ -76,12 +85,39 @@ function VolunteerDashboard() {
     setActivityUploadImage(null);
     setIsSubmitting(false);
     setIsSuccess(true);
-  };
 
+    // Refetch activities
+    fetchActivities();
+  };
   const [showModal, setShowModal] = useState(false);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  // Fetch Volunteer Activities on load
+  const [activities, setActivities] = useState([]);
+  const fetchActivities = async () => {
+    const res = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/volunteer/fetch-activities/`,
+        {
+          responseType: "json",
+          params: {
+            walletId: userDetails.walletId,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .catch((err) => console.error(err));
+    const data = await res?.data;
+    console.log(data);
+    setActivities(data.data[0].activities);
+  };
+  useEffect(fetchActivities, []);
 
   return (
     <div className={styles.Dashboard}>
@@ -138,55 +174,36 @@ function VolunteerDashboard() {
               assumenda nobis iure nisi!
             </p>
 
-            <h4 className={volunteerStyles.SectionHeading}>Badges of Honour</h4>
-            <div className={volunteerStyles.VolunteerBadges}>
-              <div className={volunteerStyles.VolunteerBadge}>
-                <Image
-                  src="/Frame 35.png"
-                  alt="badge"
-                  layout="responsive"
-                  width={50}
-                  height={50}
-                  objectFit="contain"
-                />
-              </div>
-              <div className={volunteerStyles.VolunteerBadge}>
-                <Image
-                  src="/Frame 36.png"
-                  alt="badge"
-                  layout="responsive"
-                  width={50}
-                  height={50}
-                  objectFit="contain"
-                />
-              </div>
-              <div className={volunteerStyles.VolunteerBadge}>
-                <Image
-                  src="/Frame 37.png"
-                  alt="badge"
-                  layout="responsive"
-                  width={50}
-                  height={50}
-                  objectFit="contain"
-                />
-              </div>
-            </div>
+            <h4 className={volunteerStyles.SectionHeading}>
+              Mudrika Tokens Earned :{" "}
+              <img
+                src="https://ndma.gov.in/sites/default/files/emblem-dark.png"
+                alt=""
+                style={{
+                  height: "2rem",
+                }}
+              />{" "}
+              {tokenBalance} MDK
+            </h4>
+            <div className={volunteerStyles.VolunteerBadges}></div>
 
-            <h4 className={volunteerStyles.SectionHeading}>Activities</h4>
-            <Button
-              variant="primary"
-              style={{ float: "right" }}
-              onClick={handleShow}
-            >
-              Add Activity
-            </Button>
-            {/* Add Activity Modal */}
+            <div className="d-flex items-center justify-content-between w-100 mb-3">
+              <h4 className={volunteerStyles.SectionHeading}>Activities</h4>
+              <Button
+                variant="primary"
+                style={{ float: "right" }}
+                onClick={handleShow}
+              >
+                Add Activity
+              </Button>
+            </div>
+            {/* Add New Activity Modal */}
             <Modal show={showModal} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Add Activity</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <Form onSubmit={handleFormSubmit} id="activityForm">
+                <Form onSubmit={handleNewActivityFormSubmit} id="activityForm">
                   <Form.Group className="mb-3">
                     <Form.Label>Activity Description</Form.Label>
                     <Form.Control
@@ -255,6 +272,25 @@ function VolunteerDashboard() {
                 </Toast>
               </ToastContainer>
             </Modal>
+            <Col>
+              {activities.map((activity, index) => {
+                const act = JSON.parse(activity);
+                return (
+                  <Card className="w-100 mb-4" key={index}>
+                    <div className="p-4">
+                      <div className="h4 text-muted">{userData.name}</div>
+                      <small className="text-muted font-italics">
+                        Posted on {new Date(act.date).toLocaleString("en-US")}
+                      </small>
+                    </div>
+                    <Card.Img variant="top" src={act.imageLink} />
+                    <Card.Body>
+                      <div>{act.description}</div>
+                    </Card.Body>
+                  </Card>
+                );
+              })}
+            </Col>
           </Card.Body>
         </Card>
       </div>
