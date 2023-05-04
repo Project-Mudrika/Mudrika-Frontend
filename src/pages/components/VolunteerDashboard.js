@@ -7,7 +7,6 @@ import {
   Toast,
   Spinner,
   ToastContainer,
-  Col,
 } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import { useStoreState } from "easy-peasy";
@@ -18,6 +17,7 @@ import styles from "../../styles/Dashboard.module.scss";
 import volunteerStyles from "../../styles/Volunteer.module.scss";
 import { pinFileToIPFS } from "../../helpers/uploadIpfs";
 import TokenHelper from "../../helpers/TokenHelper";
+import ActivitiesList from "./ActivitiesList";
 
 function VolunteerDashboard() {
   const userDetails = useStoreState((state) => state.userData);
@@ -56,7 +56,9 @@ function VolunteerDashboard() {
 
     // Construct the activity FormData object
     const formData = new FormData();
+    console.log("user details:", userDetails);
     formData.append("walletid", userDetails.walletId);
+    formData.append("username", userData.name);
     formData.append("description", description);
     formData.append("date", new Date().toISOString());
     formData.append("imageLink", fileUrl);
@@ -272,25 +274,7 @@ function VolunteerDashboard() {
                 </Toast>
               </ToastContainer>
             </Modal>
-            <Col>
-              {activities.map((activity, index) => {
-                const act = JSON.parse(activity);
-                return (
-                  <Card className="w-100 mb-4" key={index}>
-                    <div className="p-4">
-                      <div className="h4 text-muted">{userData.name}</div>
-                      <small className="text-muted font-italics">
-                        Posted on {new Date(act.date).toLocaleString("en-US")}
-                      </small>
-                    </div>
-                    <Card.Img variant="top" src={act.imageLink} />
-                    <Card.Body>
-                      <div>{act.description}</div>
-                    </Card.Body>
-                  </Card>
-                );
-              })}
-            </Col>
+            <ActivitiesList activities={activities} />
           </Card.Body>
         </Card>
       </div>
