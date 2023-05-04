@@ -24,6 +24,7 @@
     "react-bootstrap": "^2.4.0",
     "react-datepicker": "^4.10.0",
     "react-dom": "17.0.2",
+    "react-masonry-css": "^1.0.16",
     "react-redux": "^8.0.5",
     "sass": "^1.52.3",
     "urql": "^3.0.4",
