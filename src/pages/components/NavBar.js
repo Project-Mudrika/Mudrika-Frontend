@@ -80,6 +80,15 @@ export default function NavBar({ loginPage }) {
                 >
                   Consignments
                 </Nav.Link>
+                <Nav.Link
+                  className={`${styles.Navbar_list_item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push("/volunteers");
+                  }}
+                >
+                  Volunteers
+                </Nav.Link>
               </Nav>
             )}
 
