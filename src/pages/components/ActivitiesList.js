@@ -12,19 +12,39 @@ import {
 } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 import Masonry from "react-masonry-css";
+import TokenHelper from "../../helpers/TokenHelper";
 
 function ActivitiesList({ activities = "", authority = false }) {
-  const awardTokens = (toAddress) => {
-    console.log(toAddress);
-  };
+
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [MDKAmount, setMDKAmount] = useState(0);
+  const [toAddress, setToAddress] = useState("");
+
+  const tokenHelper = new TokenHelper();
+
+  const awardTokens = (e, toAddress) => {
+    e.preventDefault();
+    setToAddress(toAddress);
+    setShowModal(true);
+  };
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-  const handleNewActivityFormSubmit = () => { };
+  const handleTokenAwardSubmit = async (e) => {
+    e.preventDefault();
+    if (toAddress !== null && MDKAmount > 0) {
+      var res = await tokenHelper.mintTokens(toAddress, MDKAmount);
+      if (res == "Success")
+        setShowModal(false)
+      alert("Tokens Awarded Successfully")
+    }
+    else {
+      alert("Try again");
+    }
+  };
 
   console.log("Activity", activities.length);
   return (
@@ -37,6 +57,7 @@ function ActivitiesList({ activities = "", authority = false }) {
         ? activities.map((activity, index) => {
           try {
             const act = JSON.parse(activity);
+            console.log(activity)
             return (
               <Col key={index}>
                 <Card>
@@ -48,36 +69,40 @@ function ActivitiesList({ activities = "", authority = false }) {
                           Posted on {new Date(act.date).toLocaleString("en-US")}
                         </small>
                       </div>
-                      <Button
-                        variant={"dark"}
-                        className="d-flex justify-content-center align-items-center"
-                        onClick={() => awardTokens(act.walletid)}
-                      >
-                        {" "}
-                        <img
-                          src="https://ndma.gov.in/sites/default/files/emblem-dark.png"
-                          alt=""
-                          style={{
-                            height: "1.5rem",
-                            marginRight: ".5rem",
-                          }}
-                        />{" "}
-                        Award Tokens
-                      </Button>
+                      {
+                        authority === true ?
+                          <Button
+                            variant={"dark"}
+                            className="d-flex justify-content-center align-items-center"
+                            onClick={(e) => awardTokens(e, act.walletid)}
+                          >
+                            {" "}
+                            <img
+                              src="https://ndma.gov.in/sites/default/files/emblem-dark.png"
+                              alt=""
+                              style={{
+                                height: "1.5rem",
+                                marginRight: ".5rem",
+                              }}
+                            />{" "}
+                            Award Tokens
+                          </Button> : <p></p>
+                      }
                       <Modal show={showModal} onHide={handleClose}>
                         <Modal.Header closeButton>
-                          <Modal.Title>Add Activity</Modal.Title>
+                          <Modal.Title>Award Mudrika Tokens</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <Form
-                            onSubmit={handleNewActivityFormSubmit}
+                            onSubmit={(e) => handleTokenAwardSubmit(e)}
                             id="activityForm"
                           >
                             <Form.Group className="mb-3">
-                              <Form.Label>Activity Description</Form.Label>
+                              <Form.Label>No of Tokens to be Awarded</Form.Label>
                               <Form.Control
-                                rows={3}
-                                placeholder="Describe what the activity is about"
+                                type="number"
+                                placeholder="Input No of Tokens"
+                                onChange={(e) => setMDKAmount(e.target.value)}
                               />
                             </Form.Group>
                           </Form>
@@ -99,7 +124,7 @@ function ActivitiesList({ activities = "", authority = false }) {
                             {isSubmitting ? (
                               <Spinner animation="border" />
                             ) : (
-                              "Post Activity"
+                              "Award tokens"
                             )}
                           </Button>
                         </Modal.Footer>

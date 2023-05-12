@@ -58,7 +58,7 @@ function volunteers() {
           View latest activities by volunteer organizations and individuals.
           Provide incentives for their contribution efforts
         </p>
-        <ActivitiesList activities={activitiesList} />
+        <ActivitiesList activities={activitiesList} authority={true} />
       </div>
     </div>
   );
