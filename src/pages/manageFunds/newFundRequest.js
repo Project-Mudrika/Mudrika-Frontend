@@ -65,9 +65,9 @@ function NewFundRequest() {
       toAddr = "0x598518be171D592b24041e92324988035C9429F5";
     }
     await onUpload();
-    description = description.concat(`\nSupporting Documents Link: ${fileUrl}`);
-    const res = await authority.requestFunds(amount, toAddr, description);
-    console.log(amount, toAddr, description);
+    var desc = description.concat(`\nSupporting Documents Link: ${fileUrl}`);
+    console.log(amount, toAddr, desc);
+    const res = await authority.requestFunds(amount, toAddr, desc);
     alert(res);
     setAmount("");
     setToAddr("");
@@ -106,7 +106,7 @@ function NewFundRequest() {
               >
                 <option value="">-- Select Higher Authority WalletID --</option>
                 {nationalOfficers.map((officer) => (
-                  <option key={officer.accid} value={officer.accid}>
+                  <option key={officer.walletid} value={officer.walletid}>
                     {officer.fname + " " + officer.lname}
                   </option>
                 ))}
