@@ -183,7 +183,7 @@ export default function OfficerDashboard() {
               <NewsFeed />
             </Card.Body>
             <Card.Footer>
-              <small>Source: Times of India</small>
+              <small>Source: DownToEarth.org</small>
             </Card.Footer>
           </Card>
         </div>
