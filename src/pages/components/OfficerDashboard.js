@@ -12,6 +12,7 @@ import { useState } from "react";
 import FundRequestTable from "./FundRequestTable";
 import UserDetails from "../../helpers/UserDetails";
 import { useStoreState } from "easy-peasy";
+import NewsFeed from "./NewsFeed";
 
 export default function OfficerDashboard() {
   const authority = new Authority();
@@ -173,6 +174,17 @@ export default function OfficerDashboard() {
                 )}
               </FundRequestTable>
             </Card.Body>
+          </Card>
+          <Card bg="light" className={styles.Dashboard_recent_cases}>
+            <Card.Header>
+              <Card.Title>News Updates</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <NewsFeed />
+            </Card.Body>
+            <Card.Footer>
+              <small>Source: Times of India</small>
+            </Card.Footer>
           </Card>
         </div>
         <h4 className="h4">Quick Actions</h4>
