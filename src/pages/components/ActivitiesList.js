@@ -24,9 +24,9 @@ function ActivitiesList({ activities = "", authority = false }) {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-  const handleNewActivityFormSubmit = () => {};
+  const handleNewActivityFormSubmit = () => { };
 
-  console.log("Activity", activities);
+  console.log("Activity", activities.length);
   return (
     <Masonry
       breakpointCols={2}
@@ -35,6 +35,7 @@ function ActivitiesList({ activities = "", authority = false }) {
     >
       {activities !== ""
         ? activities.map((activity, index) => {
+          try {
             const act = JSON.parse(activity);
             return (
               <Col key={index}>
@@ -141,7 +142,10 @@ function ActivitiesList({ activities = "", authority = false }) {
                 </Card>
               </Col>
             );
-          })
+          } catch (error) {
+            return "No Activities Posted"
+          }
+        })
         : "No Activities Posted"}
     </Masonry>
   );
