@@ -7,15 +7,17 @@ import axios from "axios";
 import dashStyles from "../../styles/Dashboard.module.scss";
 import Router from "next/router";
 import MudrikaGraph from "../../helpers/MudrikaGraph";
+import ConsignmentGraph from "../../helpers/ConsignmentGraph";
 
 function SearchByCaseIdForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [caseId, setCaseId] = useState("");
 
   const [transactionsList, setTransactionsList] = useState([]);
-  useEffect(() => {}, [transactionsList]);
+  useEffect(() => { }, [transactionsList]);
 
   const mudrikaGraph = new MudrikaGraph();
+  const consignmentGraph = new ConsignmentGraph();
   const tableData = {
     case_id: "123456",
     transactions: [
@@ -58,8 +60,10 @@ function SearchByCaseIdForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const fundTransfers = await mudrikaGraph.fetchByCaseID();
-    console.log(fundTransfers);
+    const fundTransfers = await mudrikaGraph.fetchByCaseID(caseId);
+    const consignmentTransfers = await consignmentGraph.fetchConsignmentsByCaseId(caseId);
+    console.log("Fund Transfers", fundTransfers);
+    console.log("Consignment Transfers", consignmentTransfers);
 
     let formattedTransactions = [];
 
