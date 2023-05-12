@@ -215,7 +215,15 @@ export default function OfficerDashboard() {
               Router.push("/consignments/newConsignment");
             }}
           />
-          <QuickAction />
+          <QuickAction
+            icon="material-symbols:star"
+            text="Volunteer Management"
+            href="/volunteers"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/volunteers");
+            }}
+          />
         </div>
       </div>
     </div>
