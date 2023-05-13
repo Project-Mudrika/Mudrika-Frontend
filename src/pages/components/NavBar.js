@@ -51,7 +51,19 @@ export default function NavBar({ loginPage }) {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {loginPage ? null : (
+            {loginPage ? (
+              <Nav className={styles.Navbar_list}>
+                <Nav.Link
+                  className={`${styles.Navbar_list_item}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push("/public/");
+                  }}
+                >
+                  Public Verification Platform
+                </Nav.Link>
+              </Nav>
+            ) : (
               <Nav className={styles.Navbar_list}>
                 <Nav.Link
                   className={`${styles.Navbar_list_item}`}
