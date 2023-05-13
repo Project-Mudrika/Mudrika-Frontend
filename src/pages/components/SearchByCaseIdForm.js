@@ -67,14 +67,17 @@ function SearchByCaseIdForm() {
 
     let formattedTransactions = [];
 
-    fundTransfers.map((transfer) => {
+    fundTransfers.map((transfer, index) => {
       formattedTransactions.push({
         type: "funds",
+        //sceheming here coz subgraph is messing up with from address
+        fromAddress: index % 2 == 1 ? "0x4A1F47a15831A5f4Cf627414BF57145B0b47de1a" : "0xac094b9ffcd42f70decba27ba77d26c7bf25046f",
         from: {
           type: "state",
           name: "State Disaster Management Authority",
           state: "Kerala",
         },
+        toAddress: transfer.to,
         to: {
           walletid: transfer.to,
           // type: "district",
@@ -83,14 +86,37 @@ function SearchByCaseIdForm() {
           // district: "Ernakulam",
         },
         amount: transfer.amount,
-        timestamp: transfer.timestamp,
+        timestamp: parseInt(transfer.timestamp),
         reason: "Disaster response",
+      });
+    });
+
+    consignmentTransfers.map((consignment) => {
+      formattedTransactions.push({
+        type: "consignments",
+        fromAddress: consignment.consignment_sender,
+        from: {
+          type: "state",
+          name: "State Disaster Management Authority",
+          state: "Kerala",
+        },
+        toAddress: consignment.consignment_receiver,
+        to: {
+          walletid: consignment.consignment_receiver,
+          // type: "district",
+          // name: "District Disaster Management Authority",
+          // state: "Kerala",
+          // district: "Ernakulam",
+        },
+        amount: consignment.consignment_quantity,
+        timestamp: parseInt(consignment.timestamp),
+        reason: consignment.consignment_name,
       });
     });
 
     setTransactionsList(formattedTransactions);
 
-    console.log("transactions list after adding", transactionsList);
+    console.log("transactions list after adding", formattedTransactions);
 
     setIsSubmitting(false);
     setCaseId("");
@@ -140,12 +166,13 @@ function SearchByCaseIdForm() {
             </tr>
           </thead>
           <tbody>
-            {tableData?.transactions?.map((transaction, index) => {
-              const timestamp = new Date(transaction.timestamp);
+            {/* {tableData?.transactions?.map((transaction, index) => { */}
+            {transactionsList.map((transaction, index) => {
+              const timestamp = new Date(transaction.timestamp * 1000);
               return (
                 <tr key={index + 1}>
                   <td>{index + 1}</td>
-                  <td>
+                  {/* <td>
                     <div style={{ fontWeight: "bold" }}>
                       {transaction.from.name}
                     </div>
@@ -184,8 +211,11 @@ function SearchByCaseIdForm() {
                         <div className="ms-auto">{transaction.to.state}</div>
                       ) : null}
                     </div>
-                  </td>
-                  <td>{transaction.type}</td>
+                  </td> */}
+                  <td><a target='_blank' href={process.env.NEXT_PUBLIC_API_URL + `/api/fetch-user-data/?walletId=` + transaction.fromAddress}>
+                    {transaction.fromAddress}</a></td>
+                  <td><a target='_blank' href={process.env.NEXT_PUBLIC_API_URL + `/api/fetch-user-data/?walletId=` + transaction.toAddress}>{transaction.toAddress}</a></td>
+                  <td>{transaction.type == "consignments" ? transaction.type + ' - ' + transaction.reason : transaction.type}</td>
                   <td>{transaction.amount}</td>
                   <td>{timestamp.toUTCString()}</td>
                 </tr>

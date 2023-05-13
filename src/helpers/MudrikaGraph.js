@@ -13,6 +13,7 @@
 */
 
 import { createClient } from "urql";
+import Web3 from 'web3';
 
 class MudrikaGraph {
   NEXT_PUBLIC_API_URL =
@@ -46,7 +47,8 @@ class MudrikaGraph {
       id: item.id,
       amount: item.amount,
       requestId: item.requestId,
-      to: item.to,
+      to: Web3.utils.toChecksumAddress(item.to),
+      // from: Web3.utils.toChecksumAddress(item.by)
     }));
 
     return data_list;
@@ -70,10 +72,11 @@ class MudrikaGraph {
       let data = await this.client.query(query).toPromise();
       data_list = data.data.fundTransferreds.map((item) => ({
         amount: item.amount,
-        to: item.to,
+        to: Web3.utils.toChecksumAddress(item.to),
         timestamp: item.blockTimestamp,
       }));
     } catch (error) {
+      console.log(error);
       console.log("Graph is down")
     }
 

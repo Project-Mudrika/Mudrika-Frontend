@@ -13,6 +13,7 @@
 */
 
 import { createClient } from "urql";
+import Web3 from 'web3';
 
 class ConsignmentGraph {
   NEXT_PUBLIC_API_URL =
@@ -35,6 +36,8 @@ class ConsignmentGraph {
                     consignment_consignmentId
                     consignment_curr_holder
                     consignment_sender
+                    consignment_receiver
+                    blockTimestamp
                 }
             }
         `;
@@ -44,12 +47,14 @@ class ConsignmentGraph {
     const data_list = data.data.consignmentAddeds.map((item) => {
       return {
         consignment_consignmentId: item.consignment_consignmentId,
-        consignment_curr_holder: item.consignment_curr_holder,
+        consignment_curr_holder: Web3.utils.toChecksumAddress(item.consignment_curr_holder),
         consignment_name: item.consignment_name,
         consignment_quantity: item.consignment_quantity,
         consignment_requestId: item.consignment_requestId,
-        consignment_sender: item.consignment_sender,
+        consignment_sender: Web3.utils.toChecksumAddress(item.consignment_sender),
         consignment_status: item.consignment_status,
+        consignment_receiver: Web3.utils.toChecksumAddress(item.consignment_receiver),
+        timestamp: item.blockTimestamp
       };
     });
 
@@ -76,11 +81,11 @@ class ConsignmentGraph {
     const data_list = data.data.consignmentAddeds.map((item) => {
       return {
         consignment_consignmentId: item.consignment_consignmentId,
-        consignment_curr_holder: item.consignment_curr_holder,
+        consignment_curr_holder: Web3.utils.toChecksumAddress(item.consignment_curr_holder),
         consignment_name: item.consignment_name,
         consignment_quantity: item.consignment_quantity,
         consignment_requestId: item.consignment_requestId,
-        consignment_sender: item.consignment_sender,
+        consignment_sender: Web3.utils.toChecksumAddress(item.consignment_sender),
         consignment_status: item.consignment_status,
       };
     });
@@ -92,38 +97,6 @@ class ConsignmentGraph {
     let query = `
             {
                 consignmentAddeds(where: {consignment_consignmentId: "${consignmentId}"}) {
-                    consignment_requestId
-                    consignment_name
-                    consignment_quantity
-                    consignment_status
-                    consignment_consignmentId
-                    consignment_curr_holder
-                    consignment_sender
-                }
-            }
-        `;
-
-    let data = await this.client.query(query).toPromise();
-
-    const data_list = data.data.consignmentAddeds.map((item) => {
-      return {
-        consignment_consignmentId: item.consignment_consignmentId,
-        consignment_curr_holder: item.consignment_curr_holder,
-        consignment_name: item.consignment_name,
-        consignment_quantity: item.consignment_quantity,
-        consignment_requestId: item.consignment_requestId,
-        consignment_sender: item.consignment_sender,
-        consignment_status: item.consignment_status,
-      };
-    });
-
-    return data_list;
-  }
-
-  async fetchConsignmentsByCaseId(requestId) {
-    let query = `
-            {
-                consignmentAddeds(where: {consignment_requestId: "${requestId}"}) {
                     consignment_requestId
                     consignment_name
                     consignment_quantity
