@@ -15,7 +15,7 @@ function SearchByCaseIdForm() {
   const [caseId, setCaseId] = useState("");
 
   const [transactionsList, setTransactionsList] = useState([]);
-  useEffect(() => {}, [transactionsList]);
+  useEffect(() => { }, [transactionsList]);
 
   const mudrikaGraph = new MudrikaGraph();
   const consignmentGraph = new ConsignmentGraph();
@@ -93,6 +93,7 @@ function SearchByCaseIdForm() {
         amount: transfer.amount,
         timestamp: parseInt(transfer.timestamp),
         reason: "Disaster response",
+        txn: transfer.txn,
       });
     });
 
@@ -116,6 +117,7 @@ function SearchByCaseIdForm() {
         amount: consignment.consignment_quantity,
         timestamp: parseInt(consignment.timestamp),
         reason: consignment.consignment_name,
+        txn: consignment.txn,
       });
     });
 
@@ -292,11 +294,13 @@ function SearchByCaseIdForm() {
                     <td>{timestamp.toUTCString()}</td>
 
                     <td>
-                      {"randomTxnHash0x3f4C1d1AaB2eBf18D5834d4d3fB4c15Ad8d79Fz1".substring(
-                        0,
-                        10
-                      )}
-                      ...
+                      <a target="__blank" href={`https://mumbai.polygonscan.com/tx/${transaction.txn}`} >
+                        {transaction.txn.substring(
+                          0,
+                          10
+                        )}
+                        ...
+                      </a>
                     </td>
                   </tr>
                 );

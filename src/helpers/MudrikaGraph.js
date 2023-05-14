@@ -37,6 +37,7 @@ class MudrikaGraph {
                     requestId
                     amount
                     to
+                    transactionHash
                     }
                 }
         `;
@@ -47,6 +48,7 @@ class MudrikaGraph {
       id: item.id,
       amount: item.amount,
       requestId: item.requestId,
+      txn: item.transactionHash,
       to: Web3.utils.toChecksumAddress(item.to),
       // from: Web3.utils.toChecksumAddress(item.by)
     }));
@@ -63,6 +65,7 @@ class MudrikaGraph {
               amount
               to
               blockTimestamp
+              transactionHash
             }
           }
         `;
@@ -74,6 +77,7 @@ class MudrikaGraph {
         amount: item.amount,
         to: Web3.utils.toChecksumAddress(item.to),
         timestamp: item.blockTimestamp,
+        txn: item.transactionHash
       }));
     } catch (error) {
       console.log(error);

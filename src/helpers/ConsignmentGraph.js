@@ -38,6 +38,7 @@ class ConsignmentGraph {
                     consignment_sender
                     consignment_receiver
                     blockTimestamp
+                    transactionHash
                 }
             }
         `;
@@ -54,7 +55,8 @@ class ConsignmentGraph {
         consignment_sender: Web3.utils.toChecksumAddress(item.consignment_sender),
         consignment_status: item.consignment_status,
         consignment_receiver: Web3.utils.toChecksumAddress(item.consignment_receiver),
-        timestamp: item.blockTimestamp
+        timestamp: item.blockTimestamp,
+        txn: item.transactionHash
       };
     });
 
@@ -72,6 +74,7 @@ class ConsignmentGraph {
                     consignment_consignmentId
                     consignment_curr_holder
                     consignment_sender
+                    transactionHash
                 }
             }
         `;
@@ -87,6 +90,7 @@ class ConsignmentGraph {
         consignment_requestId: item.consignment_requestId,
         consignment_sender: Web3.utils.toChecksumAddress(item.consignment_sender),
         consignment_status: item.consignment_status,
+        txn: item.transactionHash
       };
     });
 
@@ -104,6 +108,7 @@ class ConsignmentGraph {
                     consignment_consignmentId
                     consignment_curr_holder
                     consignment_sender
+                    transactionHash
                 }
             }
         `;
@@ -119,6 +124,7 @@ class ConsignmentGraph {
         consignment_requestId: item.consignment_requestId,
         consignment_sender: item.consignment_sender,
         consignment_status: item.consignment_status,
+        txn: item.transactionHash
       };
     });
 
