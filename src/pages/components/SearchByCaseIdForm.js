@@ -15,7 +15,7 @@ function SearchByCaseIdForm() {
   const [caseId, setCaseId] = useState("");
 
   const [transactionsList, setTransactionsList] = useState([]);
-  useEffect(() => { }, [transactionsList]);
+  useEffect(() => {}, [transactionsList]);
 
   const mudrikaGraph = new MudrikaGraph();
   const consignmentGraph = new ConsignmentGraph();
@@ -199,7 +199,7 @@ function SearchByCaseIdForm() {
                 <th>Transaction Type</th>
                 <th>Amount</th>
                 <th>Timestamp</th>
-                <th>Transaction hash</th>
+                <th>Transaction Hash</th>
               </tr>
             </thead>
             <tbody>
@@ -294,11 +294,11 @@ function SearchByCaseIdForm() {
                     <td>{timestamp.toUTCString()}</td>
 
                     <td>
-                      <a target="__blank" href={`https://mumbai.polygonscan.com/tx/${transaction.txn}`} >
-                        {transaction.txn.substring(
-                          0,
-                          10
-                        )}
+                      <a
+                        target="__blank"
+                        href={`https://mumbai.polygonscan.com/tx/${transaction.txn}`}
+                      >
+                        {transaction.txn.substring(0, 10)}
                         ...
                       </a>
                     </td>

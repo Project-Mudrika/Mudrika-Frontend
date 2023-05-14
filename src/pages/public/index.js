@@ -9,8 +9,8 @@ function Retrieve() {
   const handleCaseClick = () => {
     Router.push("/public/case");
   };
-  const handleDeptClick = () => {
-    Router.push("/public/department");
+  const handleConsClick = () => {
+    Router.push("/public/consignment_track");
   };
 
   return (
@@ -31,15 +31,15 @@ function Retrieve() {
           type="officer"
           icon="ic:round-menu-book"
           title="Search by Case ID"
-          description="View the activity by searching with caseId"
+          description="View the activity by searching with Case ID"
           onClick={handleCaseClick}
         />
         <RegistrationCard
           type="dept"
-          icon="heroicons:building-office-2-20-solid"
-          title="Search by Department"
-          description="View the activity by searching with department"
-          onClick={handleDeptClick}
+          icon="mdi:truck-cargo-container"
+          title="Track Consignment Details"
+          description="View consignment transit and handover history with Consignment ID"
+          onClick={handleConsClick}
         />
       </div>
     </div>
