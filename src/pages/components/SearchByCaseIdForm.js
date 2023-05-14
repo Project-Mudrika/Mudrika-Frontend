@@ -8,6 +8,7 @@ import dashStyles from "../../styles/Dashboard.module.scss";
 import Router from "next/router";
 import MudrikaGraph from "../../helpers/MudrikaGraph";
 import ConsignmentGraph from "../../helpers/ConsignmentGraph";
+import Link from "next/link";
 
 function SearchByCaseIdForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -212,9 +213,13 @@ function SearchByCaseIdForm() {
                       ) : null}
                     </div>
                   </td> */}
-                  <td><a target='_blank' href={process.env.NEXT_PUBLIC_API_URL + `/api/fetch-user-data/?walletId=` + transaction.fromAddress}>
-                    {transaction.fromAddress}</a></td>
-                  <td><a target='_blank' href={process.env.NEXT_PUBLIC_API_URL + `/api/fetch-user-data/?walletId=` + transaction.toAddress}>{transaction.toAddress}</a></td>
+                  <td><Link target='_blank' href={`/public/userdetails/?walletId=` + transaction.fromAddress}>
+                    {transaction.fromAddress}</Link></td>
+
+                  <td><Link target='_blank'
+                    href={{ pathname: `/public/userdetails/`, query: { walletId: transaction.toAddress } }}>
+                    {transaction.toAddress}</Link></td>
+
                   <td>{transaction.type == "consignments" ? transaction.type + ' - ' + transaction.reason : transaction.type}</td>
                   <td>{transaction.amount}</td>
                   <td>{timestamp.toUTCString()}</td>
