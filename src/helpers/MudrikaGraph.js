@@ -16,7 +16,7 @@ import { createClient } from "urql";
 
 class MudrikaGraph {
   NEXT_PUBLIC_API_URL =
-    "https://api.studio.thegraph.com/query/43448/mudrika_test/v0.0.1";
+    process.env.NEXT_PUBLIC_MUDRIKA_GRAPH_URL;
 
   constructor() {
     this.client = createClient({
@@ -53,7 +53,7 @@ class MudrikaGraph {
   }
 
   // For search by caseID
-  async fetchByCaseID(caseID = 1) {
+  async fetchByCaseID(caseID) {
     console.log("reached");
     let query = `
         {
@@ -64,14 +64,20 @@ class MudrikaGraph {
             }
           }
         `;
-    let data = await this.client.query(query).toPromise();
+    var data_list = []
 
-    const data_list = data.data.fundTransferreds.map((item) => ({
-      amount: item.amount,
-      to: item.to,
-      timestamp: item.blockTimestamp,
-    }));
+    try {
+      let data = await this.client.query(query).toPromise();
+      data_list = data.data.fundTransferreds.map((item) => ({
+        amount: item.amount,
+        to: item.to,
+        timestamp: item.blockTimestamp,
+      }));
+    } catch (error) {
+      console.log("Graph is down")
+    }
 
+    console.log(data_list);
     return data_list;
   }
 }
