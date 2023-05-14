@@ -123,17 +123,18 @@ function VolunteerDashboard() {
 
   const addMudrikaToken = async (e) => {
     e.preventDefault();
-    const tokenAddress = '0x6CF40C7AE3bad60cdF1e89F82417EdB6b54b9E0C';
-    const tokenSymbol = 'MDK';
+    const tokenAddress = "0x6CF40C7AE3bad60cdF1e89F82417EdB6b54b9E0C";
+    const tokenSymbol = "MDK";
     const tokenDecimals = 18;
-    const tokenImage = 'https://ndma.gov.in/sites/default/files/emblem-dark.png';
+    const tokenImage =
+      "https://ndma.gov.in/sites/default/files/emblem-dark.png";
 
     try {
       // wasAdded is a boolean. Like any RPC method, an error may be thrown.
       const wasAdded = await ethereum.request({
-        method: 'wallet_watchAsset',
+        method: "wallet_watchAsset",
         params: {
-          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
           options: {
             address: tokenAddress, // The address that the token is at.
             symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
@@ -144,14 +145,14 @@ function VolunteerDashboard() {
       });
 
       if (wasAdded) {
-        console.log('Added MDK succesfully!');
+        console.log("Added MDK succesfully!");
       } else {
-        console.log('Failed Adding MDK!');
+        console.log("Failed Adding MDK!");
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <div className={styles.Dashboard}>
@@ -198,18 +199,25 @@ function VolunteerDashboard() {
               </div>
               <div style={{ width: 10 }}></div>
               <div className={volunteerStyles.VolunteerContact}>
-                <Button onClick={addMudrikaToken} >Add MDK to Metamask</Button>
+                {tokenBalance < 1 ? (
+                  <Button onClick={addMudrikaToken}>Add MDK to Metamask</Button>
+                ) : null}
               </div>
             </div>
 
             <h4 className={volunteerStyles.SectionHeading}>About Us</h4>
             <p className={volunteerStyles.about}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Provident, quasi dolorum cum architecto a fugiat dolor expedita
-              minima quo nisi perferendis eos accusamus corrupti illum eligendi
-              sequi, animi et inventore est cumque minus enim? Fugiat, ratione
-              animi porro earum quia tempora sed natus, voluptas omnis qui
-              assumenda nobis iure nisi!
+              Our organization is dedicated to providing relief and aid to
+              communities affected by disasters. We believe that in times of
+              crisis, every person has the power to make a difference. That's
+              why we work tirelessly to recruit and train volunteers from all
+              walks of life to respond to disasters of all kinds. Whether it's a
+              natural disaster like a hurricane or wildfire, or a human-made
+              crisis like a mass shooting or terrorist attack, our volunteers
+              stand ready to provide support and assistance to those in need.
+              From search and rescue operations to setting up emergency
+              shelters, our volunteers play a critical role in helping affected
+              communities recover and rebuild.
             </p>
 
             <h4 className={volunteerStyles.SectionHeading}>
