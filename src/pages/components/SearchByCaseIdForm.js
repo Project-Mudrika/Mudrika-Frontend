@@ -15,7 +15,7 @@ function SearchByCaseIdForm() {
   const [caseId, setCaseId] = useState("");
 
   const [transactionsList, setTransactionsList] = useState([]);
-  useEffect(() => { }, [transactionsList]);
+  useEffect(() => {}, [transactionsList]);
 
   const mudrikaGraph = new MudrikaGraph();
   const consignmentGraph = new ConsignmentGraph();
@@ -62,7 +62,8 @@ function SearchByCaseIdForm() {
     setIsSubmitting(true);
 
     const fundTransfers = await mudrikaGraph.fetchByCaseID(caseId);
-    const consignmentTransfers = await consignmentGraph.fetchConsignmentsByCaseId(caseId);
+    const consignmentTransfers =
+      await consignmentGraph.fetchConsignmentsByCaseId(caseId);
     console.log("Fund Transfers", fundTransfers);
     console.log("Consignment Transfers", consignmentTransfers);
 
@@ -72,7 +73,10 @@ function SearchByCaseIdForm() {
       formattedTransactions.push({
         type: "funds",
         //sceheming here coz subgraph is messing up with from address
-        fromAddress: index % 2 == 1 ? "0x4A1F47a15831A5f4Cf627414BF57145B0b47de1a" : "0xac094b9ffcd42f70decba27ba77d26c7bf25046f",
+        fromAddress:
+          index % 2 == 1
+            ? "0x4A1F47a15831A5f4Cf627414BF57145B0b47de1a"
+            : "0xac094b9ffcd42f70decba27ba77d26c7bf25046f",
         from: {
           type: "state",
           name: "State Disaster Management Authority",
@@ -122,6 +126,34 @@ function SearchByCaseIdForm() {
     setIsSubmitting(false);
     setCaseId("");
   };
+
+  function fetchUserDetails(walletAddress, index) {
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/?walletId=${walletAddress}`
+      )
+      .then((response) => {
+        console.log("User Details for table", response.data);
+        const userDetailsElement = document.querySelector(
+          `#user-details-${walletAddress}-${index}`
+        );
+
+        const userData = response.data.data[0];
+        const fullName = `${userData.fname || ""} ${userData.lname || ""}`;
+        const level = userData.level || "";
+        const state = userData.state || "";
+        const district = userData.district || "";
+
+        const innerHTML =
+          (fullName && fullName !== " " ? `Name: ${fullName}<br>` : "") +
+          (level ? `Level: ${level}<br>` : "") +
+          (state ? `State: ${state}<br>` : "") +
+          (district ? `District: ${district}` : "");
+        userDetailsElement.innerHTML = innerHTML;
+      })
+      .catch((error) => console.error(error));
+  }
+
   return (
     // <div className={dashStyles.Dashboard}>
     <div>
@@ -155,25 +187,26 @@ function SearchByCaseIdForm() {
           </Form>
         </Card.Body>
 
-        <Table striped bordered hover>
-          <thead className="text-center">
-            <tr>
-              <th>Sl.No</th>
-              <th>Sender</th>
-              <th>Recipient</th>
-              <th>Transaction Type</th>
-              <th>Amount</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* {tableData?.transactions?.map((transaction, index) => { */}
-            {transactionsList.map((transaction, index) => {
-              const timestamp = new Date(transaction.timestamp * 1000);
-              return (
-                <tr key={index + 1}>
-                  <td>{index + 1}</td>
-                  {/* <td>
+        {transactionsList.length > 0 ? (
+          <Table striped bordered hover>
+            <thead className="text-center">
+              <tr>
+                <th>Sl.No</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Transaction Type</th>
+                <th>Amount</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {tableData?.transactions?.map((transaction, index) => { */}
+              {transactionsList.map((transaction, index) => {
+                const timestamp = new Date(transaction.timestamp * 1000);
+                return (
+                  <tr key={index + 1}>
+                    <td>{index + 1}</td>
+                    {/* <td>
                     <div style={{ fontWeight: "bold" }}>
                       {transaction.from.name}
                     </div>
@@ -213,21 +246,55 @@ function SearchByCaseIdForm() {
                       ) : null}
                     </div>
                   </td> */}
-                  <td><Link target='_blank' href={`/public/userdetails/?walletId=` + transaction.fromAddress}>
-                    {transaction.fromAddress}</Link></td>
+                    <td>
+                      <a
+                        href=""
+                        onClick={(event) => {
+                          event.preventDefault();
+                          document.querySelector(
+                            `#user-details-${transaction.fromAddress}-${index}`
+                          ).innerHTML = "Fetching User Details...";
+                          fetchUserDetails(transaction.fromAddress, index);
+                        }}
+                      >
+                        {transaction.fromAddress}
+                      </a>
+                      <p
+                        id={`user-details-${transaction.fromAddress}-${index}`}
+                      ></p>
+                    </td>
 
-                  <td><Link target='_blank'
-                    href={{ pathname: `/public/userdetails/`, query: { walletId: transaction.toAddress } }}>
-                    {transaction.toAddress}</Link></td>
+                    <td>
+                      <a
+                        href=""
+                        onClick={(event) => {
+                          event.preventDefault();
+                          document.querySelector(
+                            `#user-details-${transaction.toAddress}-${index}`
+                          ).innerHTML = "Fetching User Details...";
+                          fetchUserDetails(transaction.toAddress, index);
+                        }}
+                      >
+                        {transaction.toAddress}
+                      </a>
+                      <p
+                        id={`user-details-${transaction.toAddress}-${index}`}
+                      ></p>
+                    </td>
 
-                  <td>{transaction.type == "consignments" ? transaction.type + ' - ' + transaction.reason : transaction.type}</td>
-                  <td>{transaction.amount}</td>
-                  <td>{timestamp.toUTCString()}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+                    <td>
+                      {transaction.type == "consignments"
+                        ? transaction.type + " - " + transaction.reason
+                        : transaction.type}
+                    </td>
+                    <td>{transaction.amount}</td>
+                    <td>{timestamp.toUTCString()}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        ) : null}
       </Card>
     </div>
   );
