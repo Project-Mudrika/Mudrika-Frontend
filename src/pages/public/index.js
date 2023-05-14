@@ -30,7 +30,7 @@ function Retrieve() {
         <RegistrationCard
           type="officer"
           icon="ic:round-menu-book"
-          title="Search by Case ID"
+          title="Search Case Details"
           description="View the activity by searching with Case ID"
           onClick={handleCaseClick}
         />
