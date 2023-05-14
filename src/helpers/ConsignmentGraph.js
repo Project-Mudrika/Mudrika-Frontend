@@ -159,18 +159,18 @@ class ConsignmentGraph {
     const locationUpdates = data.data.locationUpdateds;
 
     const result = {
-      consignment_sender: consignmentData.consignment_sender,
+      consignment_sender: Web3.utils.toChecksumAddress(consignmentData.consignment_sender),
       consignment_consignmentId: consignmentData.consignment_consignmentId,
-      consignment_curr_holder: consignmentData.consignment_curr_holder,
+      consignment_curr_holder: Web3.utils.toChecksumAddress(consignmentData.consignment_curr_holder),
       consignment_name: consignmentData.consignment_name,
-      consignment_receiver: consignmentData.consignment_receiver,
+      consignment_receiver: Web3.utils.toChecksumAddress(consignmentData.consignment_receiver),
       consignment_quantity: consignmentData.consignment_quantity,
       consignment_requestId: consignmentData.consignment_requestId,
       txn: consignmentData.transactionHash,
       locationUpdates: locationUpdates.map((item) => ({
         consignmentId: item.consignmentId,
         location: item.location,
-        updater: item.updater,
+        updater: Web3.utils.toChecksumAddress(item.updater),
         txn: item.transactionHash
       }))
     };
