@@ -197,6 +197,7 @@ function SearchByCaseIdForm() {
                 <th>Transaction Type</th>
                 <th>Amount</th>
                 <th>Timestamp</th>
+                <th>Transaction hash</th>
               </tr>
             </thead>
             <tbody>
@@ -289,6 +290,14 @@ function SearchByCaseIdForm() {
                     </td>
                     <td>{transaction.amount}</td>
                     <td>{timestamp.toUTCString()}</td>
+
+                    <td>
+                      {"randomTxnHash0x3f4C1d1AaB2eBf18D5834d4d3fB4c15Ad8d79Fz1".substring(
+                        0,
+                        10
+                      )}
+                      ...
+                    </td>
                   </tr>
                 );
               })}
