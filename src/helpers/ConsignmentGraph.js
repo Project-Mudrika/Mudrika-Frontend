@@ -130,6 +130,54 @@ class ConsignmentGraph {
 
     return data_list;
   }
+
+  async fetchConsignmentsAndLocationUpdatesById(consignmentId) {
+    let query = `
+      {
+        consignmentAddeds(first: 1, where: {consignment_consignmentId: "${consignmentId}"}) {
+          consignment_sender
+          consignment_consignmentId
+          consignment_curr_holder
+          consignment_name
+          consignment_receiver
+          consignment_quantity
+          consignment_requestId
+          transactionHash
+        }
+        locationUpdateds(where: {consignmentId: "${consignmentId}"}) {
+          consignmentId
+          location
+          updater
+          transactionHash
+        }
+      }
+    `;
+
+    let data = await this.client.query(query).toPromise();
+
+    const consignmentData = data.data.consignmentAddeds[0];
+    const locationUpdates = data.data.locationUpdateds;
+
+    const result = {
+      consignment_sender: Web3.utils.toChecksumAddress(consignmentData.consignment_sender),
+      consignment_consignmentId: consignmentData.consignment_consignmentId,
+      consignment_curr_holder: Web3.utils.toChecksumAddress(consignmentData.consignment_curr_holder),
+      consignment_name: consignmentData.consignment_name,
+      consignment_receiver: Web3.utils.toChecksumAddress(consignmentData.consignment_receiver),
+      consignment_quantity: consignmentData.consignment_quantity,
+      consignment_requestId: consignmentData.consignment_requestId,
+      txn: consignmentData.transactionHash,
+      locationUpdates: locationUpdates.map((item) => ({
+        consignmentId: item.consignmentId,
+        location: item.location,
+        updater: Web3.utils.toChecksumAddress(item.updater),
+        txn: item.transactionHash
+      }))
+    };
+
+    return result;
+  }
+
 }
 
 export default ConsignmentGraph;

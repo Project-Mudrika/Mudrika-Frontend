@@ -4,40 +4,9 @@ import React, { useState, useEffect } from "react";
 import dashStyles from "../../styles/Dashboard.module.scss";
 import axios from "axios";
 
+import ConsignmentGraph from "../../helpers/ConsignmentGraph";
+
 function TrackConsignmentForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [locationUpdates, setTransactionsList] = useState([]);
-
-  const submitHandler = () => {};
-
-  function fetchUserDetails(walletAddress, index) {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/?walletId=${walletAddress}`
-      )
-      .then((response) => {
-        console.log("User Details for table", response.data);
-        const userDetailsElement = document.querySelector(
-          `#user-details-${walletAddress}-${index}`
-        );
-
-        const userData = response.data.data[0];
-        const fullName = `${userData.first_name || ""} ${
-          userData.last_name || ""
-        }`;
-        // const phnumber = userData.mobile_number || "";
-        const state = userData.state || "";
-        const district = userData.district || "";
-
-        const innerHTML =
-          (fullName && fullName !== " " ? `Name: ${fullName}<br>` : "") +
-          //   (phnumber ? `Phone: ${phnumber}<br>` : "") +
-          (state ? `State: ${state}<br>` : "") +
-          (district ? `District: ${district}` : "");
-        userDetailsElement.innerHTML = innerHTML;
-      })
-      .catch((error) => console.error(error));
-  }
 
   const tempData = {
     data: {
@@ -50,6 +19,7 @@ function TrackConsignmentForm() {
           consignment_receiver: "0x598518be171d592b24041e92324988035c9429f5",
           consignment_quantity: "20",
           consignment_requestId: "2",
+          txn: "                                                                                                                               "
         },
       ],
       locationUpdateds: [
@@ -72,10 +42,62 @@ function TrackConsignmentForm() {
     },
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [locationUpdates, setTransactionsList] = useState([]);
+  const [consignment, setConsignmentData] = useState(tempData);
+  const [caseId, setCaseId] = useState("");
+
+  const consignmentGraph = new ConsignmentGraph();
+
+  function fetchUserDetails(walletAddress, index) {
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/fetch-user-data/?walletId=${walletAddress}`
+      )
+      .then((response) => {
+        console.log("User Details for table", response.data);
+        const userDetailsElement = document.querySelector(
+          `#user-details-${walletAddress}-${index}`
+        );
+
+        const userData = response.data.data[0];
+        const fullName = `${userData.first_name || ""} ${userData.last_name || ""
+          }`;
+        // const phnumber = userData.mobile_number || "";
+        const state = userData.state || "";
+        const district = userData.district || "";
+
+        const innerHTML =
+          (fullName && fullName !== " " ? `Name: ${fullName}<br>` : "") +
+          //   (phnumber ? `Phone: ${phnumber}<br>` : "") +
+          (state ? `State: ${state}<br>` : "") +
+          (district ? `District: ${district}` : "");
+        userDetailsElement.innerHTML = innerHTML;
+      })
+      .catch((error) => console.error(error));
+  }
+
   //   Temporarily directly set the JSON object immediately. Remove this and put the thing inside the submit handler
-  useEffect(() => {
-    setTransactionsList(tempData.data.locationUpdateds);
-  }, []);
+  // useEffect(() => {
+  // setTransactionsList(tempData.data.locationUpdateds);
+  // }, []);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const consignmentTransfers =
+      await consignmentGraph.fetchConsignmentsAndLocationUpdatesById(caseId);
+
+    console.log("Consignment Transfers", consignmentTransfers);
+
+
+    setTransactionsList(consignmentTransfers.locationUpdates);
+    setConsignmentData(consignmentTransfers);
+
+    setIsSubmitting(false);
+    setCaseId("");
+  };
 
   return (
     <div>
@@ -116,56 +138,62 @@ function TrackConsignmentForm() {
                 <Card.Title>Consignment Details</Card.Title>
               </Card.Header>
               <Card.Body>
-                {tempData.data.consignmentAddeds.map((consignment) => (
-                  <div key={consignment.consignment_consignmentId}>
-                    <p style={{ fontWeight: "bolder" }}>
-                      {consignment.consignment_name}
-                    </p>
-                    <p>
-                      Sender:{" "}
-                      <a
-                        href=""
-                        onClick={(event) => {
-                          event.preventDefault();
-                          document.querySelector(
-                            `#user-details-${consignment.consignment_sender}-${consignment.consignment_consignmentId}`
-                          ).innerHTML = "Fetching User Details...";
-                          fetchUserDetails(
-                            consignment.consignment_sender,
-                            consignment.consignment_consignmentId
-                          );
-                        }}
-                      >
-                        {consignment.consignment_sender}
-                      </a>
-                      <p
-                        id={`user-details-${consignment.consignment_sender}-${consignment.consignment_consignmentId}`}
-                      ></p>
-                    </p>
-                    <p>
-                      Receiver:
-                      <a
-                        href=""
-                        onClick={(event) => {
-                          event.preventDefault();
-                          document.querySelector(
-                            `#user-details-${consignment.consignment_receiver}-${consignment.consignment_consignmentId}`
-                          ).innerHTML = "Fetching User Details...";
-                          fetchUserDetails(
-                            consignment.consignment_receiver,
-                            consignment.consignment_consignmentId
-                          );
-                        }}
-                      >
-                        {consignment.consignment_receiver}
-                      </a>
-                      <p
-                        id={`user-details-${consignment.consignment_receiver}-${consignment.consignment_consignmentId}`}
-                      ></p>
-                    </p>
-                    <p>Quantity: {consignment.consignment_quantity} units</p>
-                  </div>
-                ))}
+                {/* {consignmentData.map((consignment) => ( */}
+                <div key={consignment.consignment_consignmentId}>
+                  <p style={{ fontWeight: "bolder" }}>
+                    {consignment.consignment_name}
+                  </p>
+                  <p>
+                    Sender:{" "}
+                    <a
+                      href=""
+                      onClick={(event) => {
+                        event.preventDefault();
+                        document.querySelector(
+                          `#user-details-${consignment.consignment_sender}-${consignment.consignment_consignmentId}`
+                        ).innerHTML = "Fetching User Details...";
+                        fetchUserDetails(
+                          consignment.consignment_sender,
+                          consignment.consignment_consignmentId
+                        );
+                      }}
+                    >
+                      {consignment.consignment_sender}
+                    </a>
+                    <p
+                      id={`user-details-${consignment.consignment_sender}-${consignment.consignment_consignmentId}`}
+                    ></p>
+                  </p>
+                  <p>
+                    Receiver:
+                    <a
+                      href=""
+                      onClick={(event) => {
+                        event.preventDefault();
+                        document.querySelector(
+                          `#user-details-${consignment.consignment_receiver}-${consignment.consignment_consignmentId}`
+                        ).innerHTML = "Fetching User Details...";
+                        fetchUserDetails(
+                          consignment.consignment_receiver,
+                          consignment.consignment_consignmentId
+                        );
+                      }}
+                    >
+                      {consignment.consignment_receiver}
+                    </a>
+                    <p
+                      id={`user-details-${consignment.consignment_receiver}-${consignment.consignment_consignmentId}`}
+                    ></p>
+                  </p>
+                  <p>Quantity: {consignment.consignment_quantity} units</p>
+                  <p>Transaction Hash: {"  "}
+                    <a target="__blank"
+                      href={`https://mumbai.polygonscan.com/tx/${consignment.txn}`} >
+                      {consignment.txn ? consignment.txn.substring(0, 45) : " "}...
+                    </a>
+                  </p>
+                </div>
+                {/* ))} */}
               </Card.Body>
             </Card>
             <h5 className="mt-4">Location Updates</h5>
@@ -201,11 +229,10 @@ function TrackConsignmentForm() {
                       </td>
                       <td>
                         <a
-                          // target="__blank"
-                          //   href={`https://mumbai.polygonscan.com/tx/${transaction.txn}`}
-                          href=""
+                          target="__blank"
+                          href={`https://mumbai.polygonscan.com/tx/${update.txn}`}
                         >
-                          {"transaction.txn".substring(0, 10)}
+                          {update.txn.substring(0, 10)}
                           ...
                         </a>
                       </td>
@@ -215,9 +242,10 @@ function TrackConsignmentForm() {
               </tbody>
             </Table>
           </div>
-        ) : null}
-      </Card>
-    </div>
+        ) : null
+        }
+      </Card >
+    </div >
   );
 }
 
