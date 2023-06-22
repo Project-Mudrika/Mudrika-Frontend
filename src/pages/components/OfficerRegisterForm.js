@@ -39,7 +39,7 @@ function OfficerRegisterForm() {
     setIsSubmitting(true);
 
     let registerFormData = new FormData();
-    registerFormData.append("acc_address", address);
+    registerFormData.append("walletid", address);
     registerFormData.append("first_name", firstName);
     registerFormData.append("last_name", lastName);
     registerFormData.append("username", username);
